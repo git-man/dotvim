@@ -2,6 +2,48 @@
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
+" === Vundle Section (Plugin-Manager) ==========================================
+filetype off	" required
+
+let iCanHazVundle=1
+let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
+
+if !filereadable(vundle_readme)
+	echo "Installing Vundle.."
+	echo ""
+	silent !mkdir -p ~/.vim/bundle
+	silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+	let iCanHazVundle=0
+endif
+
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+Bundle 'gmarik/vundle'
+
+" --- My Bundles ---
+" - original repos on github -> username/repo_name
+"Bundle 'Syntastic' "uber awesome syntax and errors highlighter
+"Bundle 'altercation/vim-colors-solarized' "T-H-E colorscheme
+Bundle 'tpope/vim-fugitive'
+Bundle 'taglist-plus'
+Bundle 'jshint.vim'
+Bundle 'ccase.vim'
+
+" - vim-scripts repos from vim.org site -> script_name
+"Bundle 'FuzzyFinder'
+" - non github repos
+"Bundle 'git://git.wincent.com/command-t.git'
+" --- My Bundles END ---
+
+if iCanHazVundle == 0
+	echo "Installing Bundles, please ignore key map error messages"
+	echo ""
+	:BundleInstall
+endif
+
+filetype plugin indent on	" required
+" === Vundle END ===============================================================
+
 " When started as "evim", evim.vim will already have done these settings.
 if v:progname =~? "evim"
   finish
@@ -47,7 +89,6 @@ if has("autocmd")
   " Use the default filetype settings, so that mail gets 'tw' set to 72,
   " 'cindent' is on in C files, etc.
   " Also load indent files, to automatically do language-dependent indenting.
-  filetype plugin indent on
 
   " Language defined custom settings
   autocmd FileType text setlocal textwidth=80 ai fo=tnaw ts=3 sts=3 sw=3 expandtab
