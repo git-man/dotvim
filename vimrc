@@ -6,17 +6,38 @@ set nocompatible
 filetype off	" required
 
 let iCanHazVundle=1
-let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
+if has('win32') || has('win64')
+	set runtimepath=$VIM/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$VIM/.vim/after
+	let $HOME=$VIM
+	let vundle_readme=expand('$VIM\.vim\bundle\vundle\README.md')
 
-if !filereadable(vundle_readme)
-	echo "Installing Vundle.."
-	echo ""
-	silent !mkdir -p ~/.vim/bundle
-	silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
-	let iCanHazVundle=0
+	if !filereadable(vundle_readme)
+		echo "Installing Vundle.."
+		echo ""
+		exe '!mkdir ' . shellescape(expand("$HOME")) . "\\.vim\\bundle\\"
+		echo "created path..."
+		exe '!git clone https://github.com/gmarik/vundle ' . shellescape(expand("$HOME"))."\\.vim\\bundle\\vundle"
+		let iCanHazVundle=0
+	endif
+
+   let $PATH = 'D:\jsctags;' . $PATH
+
+	"let $HOME = substitute($HOME, " ", "\\\\ ", "")
+	"set runtimepath=$HOME/.vim,$HOME/vimfiles,$VIMRUNTIME,$HOME/vimfiles/after,$HOME/.vim/after
+else
+	let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
+
+	if !filereadable(vundle_readme)
+		echo "Installing Vundle.."
+		echo ""
+		silent !mkdir -p ~/.vim/bundle
+		echo $HOME/.vim/bundle
+		silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+		let iCanHazVundle=0
+	endif
 endif
 
-set rtp+=~/.vim/bundle/vundle/
+set rtp+=$HOME/.vim/bundle/vundle/
 call vundle#rc()
 Bundle 'gmarik/vundle'
 
@@ -226,7 +247,7 @@ set wildmode=longest,list
 
 " *** GUI-Settings
 "set guifont=Monospace\ 10 " sets font
-set guifont=Inconsolata\ Medium\ 14,Monospace\ 10 " sets font tried by order
+set guifont=Inconsolata\ Medium\ 14,Monospace\ 10,Inconsolata\ LGC:h13 " sets font tried by order
 set lines=55
 set columns=100
 set mousehide " hide the mouse cursor when typing
@@ -367,8 +388,12 @@ au BufRead,BufNewFile *.c,*.cpp,*.h setlocal tags+=~/.vim/tags/clibtags
 " Shortcut to rapidly toggle `set list`
 nmap <leader>l :set list!<CR>
 
-" Use the same symbols as TextMate for tabstops and EOLs
-set lcs=tab:▸\ ,eol:¬
+if has('win32') || has('win64')
+	" Use the same symbols as TextMate for tabstops and EOLs
+	set lcs=tab:�\ ,eol:�
+else
+	set lcs=tab:▸\ ,eol:¬
+endif
 
 " Format xml-file by using external program 'xmllint'
 nmap <leader>xml :silent 1,$!xmllint --format --recover - 2>/dev/null<CR>
