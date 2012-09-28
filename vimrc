@@ -49,9 +49,12 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'taglist-plus'
 Bundle 'jshint.vim'
 Bundle 'ccase.vim'
+"Bundle 'JavaScript-Indent'
+Bundle 'pangloss/vim-javascript'
 
 " - vim-scripts repos from vim.org site -> script_name
 "Bundle 'FuzzyFinder'
+
 " - non github repos
 "Bundle 'git://git.wincent.com/command-t.git'
 " --- My Bundles END ---
@@ -119,7 +122,7 @@ if has("autocmd")
 
   " Omnicompletion
   "set ofu=syntaxcomplete#Complete
-  "autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+  autocmd FileType javascript call CorrectBracketHandling()
 
   autocmd bufnewfile,bufread .vimrc,_vimrc,*.vimrc setfiletype vimrc
   autocmd bufnewfile,bufread *.txt,*.prot,README,TODO,CHANGELOG,NOTES,INSTALL setfiletype text
@@ -128,7 +131,7 @@ if has("autocmd")
   " Syntax Highlighting for vb-files
   autocmd BufNewFile,BufRead *.vb setlocal ft=vbnet
   " Treat .jst, .json files as JavaScript
-  autocmd BufNewFile,BufRead *.jst,*.json setfiletype javascript
+  autocmd BufNewFile,BufRead *.js,*.jst,*.json setfiletype javascript
 
   " For making the window of plugin projects fixed in their size
   autocmd BufWinEnter *.vimprojects setlocal wfw
@@ -230,6 +233,18 @@ inoremap ( ()<Esc>:let leavechar=")"<CR>i
 inoremap [<cr> [<cr>]<c-o>O<tab>
 inoremap [ []<Esc>:let leavechar="]"<CR>i
 imap <c-j> <Esc>:exec "normal f" . leavechar<CR>a
+
+function! CorrectBracketHandling()
+	inoremap {<cr> {<cr>}<c-o>O
+	"inoremap {<CR> {<CR>}<Esc>:let leavechar="}"<CR>O
+	inoremap { {}<Esc>:let leavechar="}"<CR>i
+	inoremap ( ()<Esc>:let leavechar=")"<CR>i
+	"inoremap " ""<Esc>:let leavechar="\""<CR>i
+	inoremap [<cr> [<cr>]<c-o>O
+	inoremap [ []<Esc>:let leavechar="]"<CR>i
+	imap <c-j> <Esc>:exec "normal f" . leavechar<CR>a
+endfunction
+
 
 " Sets clever search options
 " if search pattern consists of only lower-case --> ignorecase search
@@ -424,7 +439,4 @@ function! ProtoSkeleton()
   unlet s:line
 endfunction
 
-nmap <leader>pro mz:execute ProtoSkeleton()<CR> <Esc>`z ;;
-imap ;; <C-O>/%%%<CR><C-O><Space><C-O>c3l
-nmap ;; /%%%<CR><Space>c3l
-
+nmap <leader>pro mz:execute ProtoSkeleton()<CR> <Esc>
