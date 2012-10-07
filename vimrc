@@ -49,12 +49,15 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'taglist-plus'
 Bundle 'jshint.vim'
 Bundle 'ccase.vim'
+"Bundle 'JavaScript-Indent'
 Bundle 'project.tar.gz'
 Bundle 'asciidoc.vim'
-Bundle 'Solarized'
+Bundle 'pangloss/vim-javascript'
+Bundle 'Tabular'
 
 " - vim-scripts repos from vim.org site -> script_name
 "Bundle 'FuzzyFinder'
+
 " - non github repos
 "Bundle 'git://git.wincent.com/command-t.git'
 " --- My Bundles END ---
@@ -89,7 +92,7 @@ nnoremap <silent> <Space> :silent noh<Bar>echo<CR>
 " let &guioptions = substitute(&guioptions, "t", "", "g")
 
 " Don't use Ex mode, use Q for formatting
-"nmap Q gqap
+nmap Q gqap
 
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
@@ -106,31 +109,6 @@ if &t_Co > 2 || has("gui_running")
   syntax on
   set hlsearch
 endif
-
-" Sets global textwidth
-"set tw=80
-
-" Sets the global shiftwidth
-set shiftwidth=3
-
-" Sets the global tabstop
-set tabstop=3
-
-" Number of spaces tabs consists of while editing (pseudo-tabs)
-set softtabstop=3
-
-" Don't replace tabs with spaces
-set noexpandtab
-
-" Hightlights the cursor's line
-set cul
-
-" Numbers each line
-set number
-
-" line numbering options
-" Width of the gutter column
-set numberwidth=5
 
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
@@ -153,17 +131,18 @@ if has("autocmd")
 
   " Omnicompletion
   "set ofu=syntaxcomplete#Complete
-  "autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 
-  autocmd bufnewfile,bufread .vimrc,_vimrc,*.vimrc setlocal filetype=vim
-  "autocmd bufnewfile,bufread txt,*.prot,README,TODO,CHANGELOG,NOTES,INSTALL setfiletype text
+  autocmd bufnewfile,bufread .vimrc,_vimrc,*.vimrc setlocal ft=vim
+  autocmd bufnewfile,bufread *.txt,*.prot,README,TODO,CHANGELOG,NOTES,INSTALL
+		\ setlocal ft=text
   autocmd bufnewfile,bufread *.log,*.log.old setlocal fo=""
   autocmd bufnewfile,bufread ~/AsciiDoc/*.txt setlocal filetype=asciidoc
   
   " Syntax Highlighting for vb-files
   autocmd BufNewFile,BufRead *.vb setlocal ft=vbnet
   " Treat .jst, .json files as JavaScript
-  autocmd BufNewFile,BufRead *.jst,*.json setlocal filetype=javascript
+  autocmd BufNewFile,BufRead *.js,*.jst,*.json setlocal ft=javascript
+  autocmd BufNewFile,BufRead *.js,*.jst,*.json call CorrectBracketHandling()
 
   " For making the window of plugin projects fixed in their size
   autocmd BufWinEnter *.vimprojects setlocal wfw
@@ -203,6 +182,33 @@ if !exists(":DiffOrig")
 		  \ | wincmd p | diffthis
 endif
 
+" Sets global textwidth
+set tw=80
+
+" Sets the global shiftwidth
+set shiftwidth=3
+
+" Sets the global tabstop
+set tabstop=3
+
+" Number of spaces tabs consists of while editing (pseudo-tabs)
+set softtabstop=3
+
+" Don't replace tabs with spaces
+set noexpandtab
+
+" Hightlights the cursor's line
+set cul
+
+" Highlight the cursor's column
+set cursorcolumn
+
+" Numbers each line
+set number
+
+" line numbering options
+" Width of the gutter column
+set numberwidth=5
 " color used for the line numbers
 highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE guifg=DarkGrey guibg=NONE
 
@@ -242,6 +248,18 @@ inoremap [<cr> [<cr>]<c-o>O<tab>
 inoremap [ []<Esc>:let leavechar="]"<CR>i
 imap <c-j> <Esc>:exec "normal f" . leavechar<CR>a
 
+function! CorrectBracketHandling()
+	inoremap {<cr> {<cr>}<c-o>O
+	"inoremap {<CR> {<CR>}<Esc>:let leavechar="}"<CR>O
+	inoremap { {}<Esc>:let leavechar="}"<CR>i
+	inoremap ( ()<Esc>:let leavechar=")"<CR>i
+	"inoremap " ""<Esc>:let leavechar="\""<CR>i
+	inoremap [<cr> [<cr>]<c-o>O
+	inoremap [ []<Esc>:let leavechar="]"<CR>i
+	imap <c-j> <Esc>:exec "normal f" . leavechar<CR>a
+endfunction
+
+
 " Sets clever search options
 " if search pattern consists of only lower-case --> ignorecase search
 " else if one or more upper-case characters --> case-sensitive search
@@ -277,7 +295,7 @@ if has("gui_win32")	" NT Windows
 endif
 
 
-let mapleader = ","
+let mapleader = ','
 
 " For simply editing files in same directory of the current file in window by
 " expanding the path
@@ -300,6 +318,9 @@ function! <SID>StripTrailingWhitespaces()
     call cursor(l, c)
 endfunction
 " *****************************************************************************
+
+" JavaScript JSON extraction
+nmap <leader>jt 0 % % i<CR><ESC> % a <CR><ESC> k :.!python -mjson.tool<CR> y% u :vnew!<CR> p :set ft=javascript<CR><ESC>
 
 " *** Project plugin related settings *****************************************
 "map <A-S-p> :Project<CR>
@@ -406,6 +427,13 @@ else
 	set lcs=tab:▸\ ,eol:¬,trail:�
 endif
 
+" if exists(":Tabularize")
+  nmap <Leader>a= :Tabularize /=<CR>
+  vmap <Leader>a= :Tabularize /=<CR>
+  nmap <Leader>a: :Tabularize /:\zs<CR>
+  vmap <Leader>a: :Tabularize /:\zs<CR>
+" endif
+
 " Format xml-file by using external program 'xmllint'
 nmap <leader>xml :silent 1,$!xmllint --format --recover - 2>/dev/null<CR>
 
@@ -435,7 +463,4 @@ function! ProtoSkeleton()
   unlet s:line
 endfunction
 
-nmap <leader>pro mz:execute ProtoSkeleton()<CR> <Esc>`z ;;
-imap ;; <C-O>/%%%<CR><C-O><Space><C-O>c3l
-nmap ;; /%%%<CR><Space>c3l
-
+nmap <leader>pro mz:execute ProtoSkeleton()<CR> <Esc>
