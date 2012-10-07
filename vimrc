@@ -51,6 +51,7 @@ Bundle 'jshint.vim'
 Bundle 'ccase.vim'
 "Bundle 'JavaScript-Indent'
 Bundle 'pangloss/vim-javascript'
+Bundle 'Tabular'
 
 " - vim-scripts repos from vim.org site -> script_name
 "Bundle 'FuzzyFinder'
@@ -89,7 +90,7 @@ nnoremap <silent> <Space> :silent noh<Bar>echo<CR>
 " let &guioptions = substitute(&guioptions, "t", "", "g")
 
 " Don't use Ex mode, use Q for formatting
-"nmap Q gqap
+nmap Q gqap
 
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
@@ -118,20 +119,21 @@ if has("autocmd")
   autocmd FileType text setlocal textwidth=80 ai fo=tnaw ts=3 sts=3 sw=3 expandtab
     \ flp=^\\s*\\([0-9*-]\\+\\\\|->\\\\|[a-z]\\)[\\]:.)}\\t\ ]\\s* 
   autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
-  autocmd FileType vimrc setlocal ts=2 sts=2 sw=2 noexpandtab tw=80 fo=""
+  autocmd FileType vim setlocal ts=2 sts=2 sw=2 noexpandtab tw=0
 
   " Omnicompletion
   "set ofu=syntaxcomplete#Complete
-  autocmd FileType javascript call CorrectBracketHandling()
 
-  autocmd bufnewfile,bufread .vimrc,_vimrc,*.vimrc setfiletype vimrc
-  autocmd bufnewfile,bufread *.txt,*.prot,README,TODO,CHANGELOG,NOTES,INSTALL setfiletype text
+  autocmd bufnewfile,bufread .vimrc,_vimrc,*.vimrc setlocal ft=vim
+  autocmd bufnewfile,bufread *.txt,*.prot,README,TODO,CHANGELOG,NOTES,INSTALL
+		\ setlocal ft=text
   autocmd bufnewfile,bufread *.log,*.log.old setlocal fo=""
   
   " Syntax Highlighting for vb-files
   autocmd BufNewFile,BufRead *.vb setlocal ft=vbnet
   " Treat .jst, .json files as JavaScript
-  autocmd BufNewFile,BufRead *.js,*.jst,*.json setfiletype javascript
+  autocmd BufNewFile,BufRead *.js,*.jst,*.json setlocal ft=javascript
+  autocmd BufNewFile,BufRead *.js,*.jst,*.json call CorrectBracketHandling()
 
   " For making the window of plugin projects fixed in their size
   autocmd BufWinEnter *.vimprojects setlocal wfw
@@ -188,6 +190,9 @@ set noexpandtab
 
 " Hightlights the cursor's line
 set cul
+
+" Highlight the cursor's column
+set cursorcolumn
 
 " Numbers each line
 set number
@@ -281,7 +286,7 @@ if has("gui_win32")	" NT Windows
 endif
 
 
-let mapleader = ","
+let mapleader = ','
 
 " For simply editing files in same directory of the current file in window by
 " expanding the path
@@ -304,6 +309,9 @@ function! <SID>StripTrailingWhitespaces()
     call cursor(l, c)
 endfunction
 " *****************************************************************************
+
+" JavaScript JSON extraction
+nmap <leader>jt 0 % % i<CR><ESC> % a <CR><ESC> k :.!python -mjson.tool<CR> y% u :vnew!<CR> p :set ft=javascript<CR><ESC>
 
 " *** Project plugin related settings *****************************************
 "map <A-S-p> :Project<CR>
@@ -409,6 +417,13 @@ if has('win32') || has('win64')
 else
 	set lcs=tab:▸\ ,eol:¬
 endif
+
+" if exists(":Tabularize")
+  nmap <Leader>a= :Tabularize /=<CR>
+  vmap <Leader>a= :Tabularize /=<CR>
+  nmap <Leader>a: :Tabularize /:\zs<CR>
+  vmap <Leader>a: :Tabularize /:\zs<CR>
+" endif
 
 " Format xml-file by using external program 'xmllint'
 nmap <leader>xml :silent 1,$!xmllint --format --recover - 2>/dev/null<CR>
