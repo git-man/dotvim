@@ -49,6 +49,9 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'taglist-plus'
 Bundle 'jshint.vim'
 Bundle 'ccase.vim'
+Bundle 'project.tar.gz'
+Bundle 'asciidoc.vim'
+Bundle 'Solarized'
 
 " - vim-scripts repos from vim.org site -> script_name
 "Bundle 'FuzzyFinder'
@@ -104,6 +107,31 @@ if &t_Co > 2 || has("gui_running")
   set hlsearch
 endif
 
+" Sets global textwidth
+"set tw=80
+
+" Sets the global shiftwidth
+set shiftwidth=3
+
+" Sets the global tabstop
+set tabstop=3
+
+" Number of spaces tabs consists of while editing (pseudo-tabs)
+set softtabstop=3
+
+" Don't replace tabs with spaces
+set noexpandtab
+
+" Hightlights the cursor's line
+set cul
+
+" Numbers each line
+set number
+
+" line numbering options
+" Width of the gutter column
+set numberwidth=5
+
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
   " Enable file type detection.
@@ -115,20 +143,27 @@ if has("autocmd")
   autocmd FileType text setlocal textwidth=80 ai fo=tnaw ts=3 sts=3 sw=3 expandtab
     \ flp=^\\s*\\([0-9*-]\\+\\\\|->\\\\|[a-z]\\)[\\]:.)}\\t\ ]\\s* 
   autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
-  autocmd FileType vimrc setlocal ts=2 sts=2 sw=2 noexpandtab tw=80 fo=""
+  autocmd FileType vim setlocal ts=2 sts=2 sw=2 noexpandtab fo="" tw=0
+  autocmd FileType mail,text,asciidoc,html setlocal spell spelllang=en,de
+  autocmd FileType asciidoc
+        \ setlocal autoindent expandtab softtabstop=2 shiftwidth=2
+        \ formatoptions=tcqn
+        \ formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*<\\d\\+>\\s\\+\\\\|^\\s*[a-zA-Z.]\\.\\s\\+\\\\|^\\s*[ivxIVX]\\+\\.\\s\\+
+        \ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
 
   " Omnicompletion
   "set ofu=syntaxcomplete#Complete
   "autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 
-  autocmd bufnewfile,bufread .vimrc,_vimrc,*.vimrc setfiletype vimrc
-  autocmd bufnewfile,bufread *.txt,*.prot,README,TODO,CHANGELOG,NOTES,INSTALL setfiletype text
+  autocmd bufnewfile,bufread .vimrc,_vimrc,*.vimrc setlocal filetype=vim
+  "autocmd bufnewfile,bufread txt,*.prot,README,TODO,CHANGELOG,NOTES,INSTALL setfiletype text
   autocmd bufnewfile,bufread *.log,*.log.old setlocal fo=""
+  autocmd bufnewfile,bufread ~/AsciiDoc/*.txt setlocal filetype=asciidoc
   
   " Syntax Highlighting for vb-files
   autocmd BufNewFile,BufRead *.vb setlocal ft=vbnet
   " Treat .jst, .json files as JavaScript
-  autocmd BufNewFile,BufRead *.jst,*.json setfiletype javascript
+  autocmd BufNewFile,BufRead *.jst,*.json setlocal filetype=javascript
 
   " For making the window of plugin projects fixed in their size
   autocmd BufWinEnter *.vimprojects setlocal wfw
@@ -168,30 +203,6 @@ if !exists(":DiffOrig")
 		  \ | wincmd p | diffthis
 endif
 
-" Sets global textwidth
-set tw=80
-
-" Sets the global shiftwidth
-set shiftwidth=3
-
-" Sets the global tabstop
-set tabstop=3
-
-" Number of spaces tabs consists of while editing (pseudo-tabs)
-set softtabstop=3
-
-" Don't replace tabs with spaces
-set noexpandtab
-
-" Hightlights the cursor's line
-set cul
-
-" Numbers each line
-set number
-
-" line numbering options
-" Width of the gutter column
-set numberwidth=5
 " color used for the line numbers
 highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE guifg=DarkGrey guibg=NONE
 
@@ -390,9 +401,9 @@ nmap <leader>l :set list!<CR>
 
 if has('win32') || has('win64')
 	" Use the same symbols as TextMate for tabstops and EOLs
-	set lcs=tab:»\ ,eol:¬
+	set lcs=tab:»\ ,eol:¬,trail:·
 else
-	set lcs=tab:â–¸\ ,eol:Â¬
+	set lcs=tab:â–¸\ ,eol:Â¬,trail:·
 endif
 
 " Format xml-file by using external program 'xmllint'
