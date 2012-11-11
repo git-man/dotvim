@@ -79,7 +79,7 @@ endif
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
-set writebackup	" creat a backup before writing to file, then remove it
+set writebackup	" create a backup before writing to file, then remove it
 set noswapfile		" disables creation of swapfiles
 set history=500	" keep 50 lines of command line history
 set ruler			" show the cursor position all the time
@@ -93,6 +93,7 @@ nnoremap <silent> <Space> :silent noh<Bar>echo<CR>
 
 " Don't use Ex mode, use Q for formatting
 nmap Q gqap
+vmap Q gq
 
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
@@ -182,6 +183,15 @@ if !exists(":DiffOrig")
 		  \ | wincmd p | diffthis
 endif
 
+" switch to pastemode
+set pastetoggle=<F2>
+
+" disable "ding" sounds
+set vb t_vb=
+
+"disable beeps
+set noerrorbells
+
 " Sets global textwidth
 set tw=80
 
@@ -211,6 +221,12 @@ set number
 set numberwidth=5
 " color used for the line numbers
 highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE guifg=DarkGrey guibg=NONE
+
+" Handle unsaved buffers
+set hidden
+
+" Change the terminals title
+set title
 
 command! -nargs=* Wrap set wrap linebreak nolist
 
@@ -417,7 +433,6 @@ au BufRead,BufNewFile *.c,*.cpp,*.h setlocal tags+=~/.vim/tags/clibtags
 " $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 "
 " show invisible characters
-" Shortcut to rapidly toggle `set list`
 nmap <leader>l :set list!<CR>
 
 if has('win32') || has('win64')
