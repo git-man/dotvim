@@ -1,2 +1,4 @@
 # ignore the 'bundle' directory
 bundle/**/*
+# ignore 'spell' dir
+spell/**/*
