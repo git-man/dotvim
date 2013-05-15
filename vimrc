@@ -58,6 +58,7 @@ Bundle 'pangloss/vim-javascript'
 "Bundle 'Simple-Javascript-Indenter'
 "Bundle 'lukaszb/vim-web-indent'
 Bundle 'Tabular'
+Bundle 'matchit.zip'
 
 " - vim-scripts repos from vim.org site -> script_name
 "Bundle 'FuzzyFinder'
