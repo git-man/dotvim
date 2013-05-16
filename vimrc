@@ -435,6 +435,9 @@ au BufRead,BufNewFile *.c,*.cpp,*.h setlocal tags+=~/.vim/tags/clibtags
 " show invisible characters
 nmap <leader>l :set list!<CR>
 
+" Run JSHint to lint the current JavaScript file with the specified rules
+nmap <silent> <leader>i :JSHint --config X:\mcis_tdi\Scripts\CI\tools\jshint\config.json %<CR>
+
 if has('win32') || has('win64')
 	" Use the same symbols as TextMate for tabstops and EOLs
 	set lcs=tab:»\ ,eol:¬,trail:·
