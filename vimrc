@@ -76,6 +76,9 @@ endif
 filetype plugin indent on	" required
 " === Vundle END ===============================================================
 
+" Omnicompletion
+set ofu=syntaxcomplete#Complete
+
 " When started as "evim", evim.vim will already have done these settings.
 if v:progname =~? "evim"
   finish
@@ -127,16 +130,19 @@ if has("autocmd")
   autocmd FileType text setlocal textwidth=80 ai fo=tnaw ts=3 sts=3 sw=3 expandtab
     \ flp=^\\s*\\([0-9*-]\\+\\\\|->\\\\|[a-z]\\)[\\]:.)}\\t\ ]\\s* 
   autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
+	autocmd FileType cs setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
+		\ efm=\ %#%f(%l\\\,%c):\ error\ CS%n:\ %m
+		\ makeprg=msbuild\ /nologo\ /v:q\ /property:Configuration=Debug;GenerateFullPaths=true
+		\ tags=tags,./tags,C:\dotnetReference\RefSrc\Source\.Net\4.0\DEVDIV_TFS\Dev10\Releases\RTMRel\tags;
+		\ foldmethod=syntax
+		\ foldlevelstart=0
   autocmd FileType vim setlocal ts=2 sts=2 sw=2 noexpandtab fo="" tw=0
   autocmd FileType mail,text,asciidoc,html setlocal spell spelllang=en,de
   autocmd FileType asciidoc
-        \ setlocal autoindent expandtab softtabstop=2 shiftwidth=2
-        \ formatoptions=tcqn
-        \ formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*<\\d\\+>\\s\\+\\\\|^\\s*[a-zA-Z.]\\.\\s\\+\\\\|^\\s*[ivxIVX]\\+\\.\\s\\+
-        \ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
-
-  " Omnicompletion
-  "set ofu=syntaxcomplete#Complete
+		\ setlocal autoindent expandtab softtabstop=2 shiftwidth=2
+		\ formatoptions=tcqn
+		\ formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*<\\d\\+>\\s\\+\\\\|^\\s*[a-zA-Z.]\\.\\s\\+\\\\|^\\s*[ivxIVX]\\+\\.\\s\\+
+		\ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
 
   autocmd bufnewfile,bufread .vimrc,_vimrc,*.vimrc setlocal ft=vim
   autocmd bufnewfile,bufread *.txt,*.prot,README,TODO,CHANGELOG,NOTES,INSTALL
@@ -149,6 +155,9 @@ if has("autocmd")
   " Treat .jst, .json files as JavaScript
   autocmd BufNewFile,BufRead *.js,*.jst,*.json setlocal ft=javascript
   autocmd BufNewFile,BufRead *.js,*.jst,*.json call CorrectBracketHandling()
+
+  autocmd BufNewFile,BufRead *.cs setlocal ft=cs
+  autocmd BufNewFile,BufRead *.cs call CorrectBracketHandling()
 
   " For making the window of plugin projects fixed in their size
   autocmd BufWinEnter *.vimprojects setlocal wfw
@@ -343,6 +352,9 @@ endfunction
 " JavaScript JSON extraction
 nmap <leader>jt 0 % % i<CR><ESC> % a <CR><ESC> k :.!python -mjson.tool<CR> y% u :vnew!<CR> p :set ft=javascript<CR><ESC>
 
+" C# tags generation
+nmap <leader>cst :!ctags.exe -R --extra="+fq" --fields=+ianmzS --c\#-kinds=cgimnps --languages=c\#<CR>
+
 " *** Project plugin related settings *****************************************
 "map <A-S-p> :Project<CR>
 "map <A-S-o> :Project<CR>:redraw<CR>/
@@ -394,11 +406,11 @@ let OmniCpp_SelectFirstItem = 0
 
 " *** Tell Vim where to search for tags ***************************************
 " To find the tags per project:
-set tags=./.tags;${HOME}
+"set tags=./.tags;${HOME}
 " To load system wide libraries based on filetype:
 "au BufRead,BufNewFile *.java setlocal tags+=~/.vim/tags/javatags 
-au BufRead,BufNewFile *.cpp,*.h setlocal tags+=~/.vim/tags/c++libtags
-au BufRead,BufNewFile *.c,*.cpp,*.h setlocal tags+=~/.vim/tags/clibtags
+"au BufRead,BufNewFile *.cpp,*.h setlocal tags+=~/.vim/tags/c++libtags
+"au BufRead,BufNewFile *.c,*.cpp,*.h setlocal tags+=~/.vim/tags/clibtags
 " *****************************************************************************
 
 " *** TagList related settings ************************************************
