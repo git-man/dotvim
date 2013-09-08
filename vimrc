@@ -128,7 +128,8 @@ if has("autocmd")
 
   " Language defined custom settings
   autocmd FileType text setlocal textwidth=80 ai fo=tnaw ts=3 sts=3 sw=3 expandtab
-    \ flp=^\\s*\\([0-9*-]\\+\\\\|->\\\\|[a-z]\\)[\\]:.)}\\t\ ]\\s* 
+    \ flp=^\\s*\\(->\\\|[0-9*-+]\\+\\\|[a-z]\\)[\\]:.)}\\t\ ]\\s* fo+=roq
+    \ colorcolumn=+1 comments-=s1:/*,mb:*,ex:*/ comments+=fb:->,fb:-,fb:+
   autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
 	autocmd FileType cs setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
 		\ efm=\ %#%f(%l\\\,%c):\ error\ CS%n:\ %m
