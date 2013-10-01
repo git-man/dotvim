@@ -128,9 +128,10 @@ if has("autocmd")
 
   " Language defined custom settings
   autocmd FileType text setlocal textwidth=80 ai fo=tnaw ts=3 sts=3 sw=3 expandtab
-    \ flp=^\\s*\\(->\\\|[0-9*-+]\\+\\\|[a-z]\\)[\\]:.)}\\t\ ]\\s* fo+=roq
-    \ colorcolumn=+1 comments-=s1:/*,mb:*,ex:*/ comments+=fb:->,fb:-,fb:+
-  autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
+		\ flp=^\\s*\\(->\\\|[0-9*-+]\\+\\\|[a-z]\\)[\\]:.)}\\t\ ]\\s* fo+=roq
+		\ colorcolumn=+1 comments-=s1:/*,mb:*,ex:*/ comments+=fb:->,fb:-,fb:+
+"		\ let &colorcolumn=join(range(81,335),",")
+	autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
 	autocmd FileType cs setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
 		\ efm=\ %#%f(%l\\\,%c):\ error\ CS%n:\ %m
 		\ makeprg=msbuild\ /nologo\ /v:q\ /property:Configuration=Debug;GenerateFullPaths=true
@@ -236,6 +237,9 @@ set number
 set numberwidth=5
 " color used for the line numbers
 highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE guifg=DarkGrey guibg=NONE
+" color used for the ColorColumn
+"highlight ColorColumn guibg=#121212
+highlight ColorColumn guibg=#4F4F4F
 
 " Handle unsaved buffers
 set hidden
