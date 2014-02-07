@@ -311,7 +311,7 @@ set wildmode=longest,list
 
 " *** GUI-Settings
 "set guifont=Monospace\ 10 " sets font
-set guifont=Inconsolata\ Medium\ 14,Monospace\ 10,Inconsolata\ LGC:h13 " sets font tried by order
+set guifont=Inconsolata\ Medium\ 14,Monospace\ 10,Inconsolata\ LGC:h14 " sets font tried by order
 set lines=55
 set columns=100
 set mousehide " hide the mouse cursor when typing
