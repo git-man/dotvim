@@ -103,6 +103,11 @@ nnoremap <silent> <Space> :silent noh<Bar>echo<CR>
 nmap Q gqap
 vmap Q gq
 
+" To filter the history of the command line mode with the <C-p> and <C-n>
+" shortcuts like with the <Up> and <Down> keys
+cnoremap <C-p> <Up>
+cnoremap <C-p> <Down>
+
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
@@ -160,6 +165,9 @@ if has("autocmd")
 
   autocmd BufNewFile,BufRead *.cs setlocal ft=cs
   autocmd BufNewFile,BufRead *.cs call CorrectBracketHandling()
+
+	" Regenerate tags file for my personal wiki
+	autocmd BufWritePost D:/Dokumentation/Wiki/* :helptags D:/Dokumentation/Wiki
 
   " For making the window of plugin projects fixed in their size
   autocmd BufWinEnter *.vimprojects setlocal wfw
