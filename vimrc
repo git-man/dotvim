@@ -141,17 +141,10 @@ if has("autocmd")
 
   " Language defined custom settings
   autocmd FileType text setlocal textwidth=80 ai fo=tnaw ts=3 sts=3 sw=3 expandtab
-<<<<<<< HEAD
-    \ flp=^\\s*\\(->\\\|[0-9*-+]\\+\\\|[a-z]\\)[\\]:.)}\\t]\\s* fo+=roq
-    \ colorcolumn=+1 comments-=s1:/*,mb:*,ex:*/ comments+=fb:->,fb:-,fb:+
-  autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
-=======
-		\ flp=^\\s*\\(->\\\|[0-9*-+]\\+\\\|[a-z]\\)[\\]:.)}\\t\ ]\\s* fo+=roq
+		\ flp=^\\s*\\(->\\\|[0-9*-+]\\+\\\|[a-z]\\)[\\]:.)}\\t]\\s* fo+=roq
 		\ colorcolumn=+1 comments-=s1:/*,mb:*,ex:*/ comments+=fb:->,fb:-,fb:+
-"		\ let &colorcolumn=join(range(81,335),",")
-	autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
->>>>>>> 38e965e5e746aeaaf3a756882585c4f3e137a00c
-	autocmd FileType cs setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
+  autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
+  autocmd FileType cs setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
 		\ efm=\ %#%f(%l\\\,%c):\ error\ CS%n:\ %m
 		\ makeprg=msbuild\ /nologo\ /v:q\ /property:Configuration=Debug;GenerateFullPaths=true
 		\ tags=tags,./tags,C:\dotnetReference\RefSrc\Source\.Net\4.0\DEVDIV_TFS\Dev10\Releases\RTMRel\tags;
