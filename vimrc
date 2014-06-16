@@ -57,8 +57,16 @@ Bundle 'pangloss/vim-javascript'
 "Bundle 'Better-Javascript-Indentation'
 "Bundle 'Simple-Javascript-Indenter'
 "Bundle 'lukaszb/vim-web-indent'
-Bundle 'Tabular'
+"Bundle 'Tabular'
 Bundle 'matchit.zip'
+Bundle 'Align'
+
+" AutomaticLaTeXPlugin ---
+"Bundle 'AutomaticLaTeXPlugin'
+"Bundle 'https://github.com/coot/atp_vim'
+Bundle 'git://git.code.sf.net/p/atp-vim/code'
+" ---
+
 
 " - vim-scripts repos from vim.org site -> script_name
 "Bundle 'FuzzyFinder'
@@ -128,7 +136,7 @@ if has("autocmd")
 
   " Language defined custom settings
   autocmd FileType text setlocal textwidth=80 ai fo=tnaw ts=3 sts=3 sw=3 expandtab
-    \ flp=^\\s*\\(->\\\|[0-9*-+]\\+\\\|[a-z]\\)[\\]:.)}\\t\ ]\\s* fo+=roq
+    \ flp=^\\s*\\(->\\\|[0-9*-+]\\+\\\|[a-z]\\)[\\]:.)}\\t]\\s* fo+=roq
     \ colorcolumn=+1 comments-=s1:/*,mb:*,ex:*/ comments+=fb:->,fb:-,fb:+
   autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
 	autocmd FileType cs setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
@@ -464,10 +472,10 @@ else
 endif
 
 " if exists(":Tabularize")
-  nmap <Leader>a= :Tabularize /=<CR>
-  vmap <Leader>a= :Tabularize /=<CR>
-  nmap <Leader>a: :Tabularize /:\zs<CR>
-  vmap <Leader>a: :Tabularize /:\zs<CR>
+"  nmap <Leader>a= :Tabularize /=<CR>
+"  vmap <Leader>a= :Tabularize /=<CR>
+"  nmap <Leader>a: :Tabularize /:\zs<CR>
+"  vmap <Leader>a: :Tabularize /:\zs<CR>
 " endif
 
 " Format xml-file by using external program 'xmllint'
