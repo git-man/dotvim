@@ -111,6 +111,11 @@ nnoremap <silent> <Space> :silent noh<Bar>echo<CR>
 nmap Q gqap
 vmap Q gq
 
+" To filter the history of the command line mode with the <C-p> and <C-n>
+" shortcuts like with the <Up> and <Down> keys
+cnoremap <C-p> <Up>
+cnoremap <C-p> <Down>
+
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
@@ -136,9 +141,16 @@ if has("autocmd")
 
   " Language defined custom settings
   autocmd FileType text setlocal textwidth=80 ai fo=tnaw ts=3 sts=3 sw=3 expandtab
+<<<<<<< HEAD
     \ flp=^\\s*\\(->\\\|[0-9*-+]\\+\\\|[a-z]\\)[\\]:.)}\\t]\\s* fo+=roq
     \ colorcolumn=+1 comments-=s1:/*,mb:*,ex:*/ comments+=fb:->,fb:-,fb:+
   autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
+=======
+		\ flp=^\\s*\\(->\\\|[0-9*-+]\\+\\\|[a-z]\\)[\\]:.)}\\t\ ]\\s* fo+=roq
+		\ colorcolumn=+1 comments-=s1:/*,mb:*,ex:*/ comments+=fb:->,fb:-,fb:+
+"		\ let &colorcolumn=join(range(81,335),",")
+	autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
+>>>>>>> 38e965e5e746aeaaf3a756882585c4f3e137a00c
 	autocmd FileType cs setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
 		\ efm=\ %#%f(%l\\\,%c):\ error\ CS%n:\ %m
 		\ makeprg=msbuild\ /nologo\ /v:q\ /property:Configuration=Debug;GenerateFullPaths=true
@@ -152,12 +164,15 @@ if has("autocmd")
 		\ formatoptions=tcqn
 		\ formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*<\\d\\+>\\s\\+\\\\|^\\s*[a-zA-Z.]\\.\\s\\+\\\\|^\\s*[ivxIVX]\\+\\.\\s\\+
 		\ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
+	autocmd FileType binMode
+		\ setlocal binary ft=xxd fo="" wrap tw=0 noexpandtab nomodeline display=uhex noeol
 
   autocmd bufnewfile,bufread .vimrc,_vimrc,*.vimrc setlocal ft=vim
   autocmd bufnewfile,bufread *.txt,*.prot,README,TODO,CHANGELOG,NOTES,INSTALL
 		\ setlocal ft=text
   autocmd bufnewfile,bufread *.log,*.log.old setlocal fo=""
   autocmd bufnewfile,bufread ~/AsciiDoc/*.txt setlocal filetype=asciidoc
+  autocmd bufnewfile,bufread *.bin,*.arc setlocal filetype=binMode
   
   " Syntax Highlighting for vb-files
   autocmd BufNewFile,BufRead *.vb setlocal ft=vbnet
@@ -167,6 +182,9 @@ if has("autocmd")
 
   autocmd BufNewFile,BufRead *.cs setlocal ft=cs
   autocmd BufNewFile,BufRead *.cs call CorrectBracketHandling()
+
+	" Regenerate tags file for my personal wiki
+	autocmd BufWritePost D:/Dokumentation/Wiki/* :helptags D:/Dokumentation/Wiki
 
   " For making the window of plugin projects fixed in their size
   autocmd BufWinEnter *.vimprojects setlocal wfw
@@ -244,6 +262,9 @@ set number
 set numberwidth=5
 " color used for the line numbers
 highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE guifg=DarkGrey guibg=NONE
+" color used for the ColorColumn
+"highlight ColorColumn guibg=#121212
+highlight ColorColumn guibg=#4F4F4F
 
 " Handle unsaved buffers
 set hidden
@@ -315,7 +336,7 @@ set wildmode=longest,list
 
 " *** GUI-Settings
 "set guifont=Monospace\ 10 " sets font
-set guifont=Inconsolata\ Medium\ 14,Monospace\ 10,Inconsolata\ LGC:h13 " sets font tried by order
+set guifont=Inconsolata\ Medium\ 14,Monospace\ 10,Inconsolata\ LGC:h14 " sets font tried by order
 set lines=55
 set columns=100
 set mousehide " hide the mouse cursor when typing
@@ -357,6 +378,20 @@ function! <SID>StripTrailingWhitespaces()
     call cursor(l, c)
 endfunction
 " *****************************************************************************
+
+" Comfortably switching HEX mode ***
+let $in_hex=0
+function HexMe()
+	setlocal binary noeol ft=xxd fo="" wrap tw=0 noexpandtab nomodeline display=uhex noeol
+	if $in_hex>0
+		:%!xxd -r
+		let $in_hex=0
+	else
+		:%!xxd
+		let $in_hex=1
+	endif
+endfunction
+" *** HEX mode function END
 
 " JavaScript JSON extraction
 nmap <leader>jt 0 % % i<CR><ESC> % a <CR><ESC> k :.!python -mjson.tool<CR> y% u :vnew!<CR> p :set ft=javascript<CR><ESC>
