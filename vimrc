@@ -150,12 +150,15 @@ if has("autocmd")
 		\ formatoptions=tcqn
 		\ formatlistpat=^\\s*\\d\\+\\.\\s\\+\\\\|^\\s*<\\d\\+>\\s\\+\\\\|^\\s*[a-zA-Z.]\\.\\s\\+\\\\|^\\s*[ivxIVX]\\+\\.\\s\\+
 		\ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
+	autocmd FileType binMode
+		\ setlocal binary ft=xxd fo="" wrap tw=0 noexpandtab nomodeline display=uhex noeol
 
   autocmd bufnewfile,bufread .vimrc,_vimrc,*.vimrc setlocal ft=vim
   autocmd bufnewfile,bufread *.txt,*.prot,README,TODO,CHANGELOG,NOTES,INSTALL
 		\ setlocal ft=text
   autocmd bufnewfile,bufread *.log,*.log.old setlocal fo=""
   autocmd bufnewfile,bufread ~/AsciiDoc/*.txt setlocal filetype=asciidoc
+  autocmd bufnewfile,bufread *.bin,*.arc setlocal filetype=binMode
   
   " Syntax Highlighting for vb-files
   autocmd BufNewFile,BufRead *.vb setlocal ft=vbnet
@@ -361,6 +364,20 @@ function! <SID>StripTrailingWhitespaces()
     call cursor(l, c)
 endfunction
 " *****************************************************************************
+
+" Comfortably switching HEX mode ***
+let $in_hex=0
+function HexMe()
+	setlocal binary noeol ft=xxd fo="" wrap tw=0 noexpandtab nomodeline display=uhex noeol
+	if $in_hex>0
+		:%!xxd -r
+		let $in_hex=0
+	else
+		:%!xxd
+		let $in_hex=1
+	endif
+endfunction
+" *** HEX mode function END
 
 " JavaScript JSON extraction
 nmap <leader>jt 0 % % i<CR><ESC> % a <CR><ESC> k :.!python -mjson.tool<CR> y% u :vnew!<CR> p :set ft=javascript<CR><ESC>
