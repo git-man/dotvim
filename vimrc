@@ -114,7 +114,7 @@ vmap Q gq
 " To filter the history of the command line mode with the <C-p> and <C-n>
 " shortcuts like with the <Up> and <Down> keys
 cnoremap <C-p> <Up>
-cnoremap <C-p> <Down>
+cnoremap <C-n> <Down>
 
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
