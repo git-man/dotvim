@@ -113,8 +113,8 @@ vmap Q gq
 
 " To filter the history of the command line mode with the <C-p> and <C-n>
 " shortcuts like with the <Up> and <Down> keys
-cnoremap <C-p> <Up>
-cnoremap <C-n> <Down>
+cnoremap <C-P> <Up>
+cnoremap <C-N> <Down>
 
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
@@ -159,11 +159,12 @@ if has("autocmd")
 		\ comments=s1:/*,ex:*/,://,b:#,:%,:XCOMM,fb:-,fb:*,fb:+,fb:.,fb:>
 	autocmd FileType binMode
 		\ setlocal binary ft=xxd fo="" wrap tw=0 noexpandtab nomodeline display=uhex noeol
+	autocmd FileType log setlocal ts=2 sts=2 sw=2 noexpandtab fo="" tw=0 wrap
 
   autocmd bufnewfile,bufread .vimrc,_vimrc,*.vimrc setlocal ft=vim
   autocmd bufnewfile,bufread *.txt,*.prot,README,TODO,CHANGELOG,NOTES,INSTALL
 		\ setlocal ft=text
-  autocmd bufnewfile,bufread *.log,*.log.old setlocal fo=""
+  autocmd bufnewfile,bufread *.log,*.log.old setlocal filetype=log
   autocmd bufnewfile,bufread ~/AsciiDoc/*.txt setlocal filetype=asciidoc
   autocmd bufnewfile,bufread *.bin,*.arc setlocal filetype=binMode
   
@@ -374,7 +375,7 @@ endfunction
 
 " Comfortably switching HEX mode ***
 let $in_hex=0
-function HexMe()
+function! HexMe()
 	setlocal binary noeol ft=xxd fo="" wrap tw=0 noexpandtab nomodeline display=uhex noeol
 	if $in_hex>0
 		:%!xxd -r
