@@ -57,7 +57,7 @@ Bundle 'pangloss/vim-javascript'
 "Bundle 'Better-Javascript-Indentation'
 "Bundle 'Simple-Javascript-Indenter'
 "Bundle 'lukaszb/vim-web-indent'
-"Bundle 'Tabular'
+Bundle 'Tabular'
 Bundle 'matchit.zip'
 Bundle 'Align'
 
@@ -500,12 +500,12 @@ else
 	set lcs=tab:▸\ ,eol:¬,trail:�
 endif
 
-" if exists(":Tabularize")
-"  nmap <Leader>a= :Tabularize /=<CR>
-"  vmap <Leader>a= :Tabularize /=<CR>
-"  nmap <Leader>a: :Tabularize /:\zs<CR>
-"  vmap <Leader>a: :Tabularize /:\zs<CR>
-" endif
+if exists(":Tabularize")
+ nmap <Leader>a= :Tabularize /=<CR>
+ vmap <Leader>a= :Tabularize /=<CR>
+ nmap <Leader>a: :Tabularize /:\zs<CR>
+ vmap <Leader>a: :Tabularize /:\zs<CR>
+endif
 
 " Format xml-file by using external program 'xmllint'
 nmap <leader>xml :silent 1,$!xmllint --format --recover - 2>/dev/null<CR>
