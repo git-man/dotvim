@@ -169,7 +169,7 @@ if has("autocmd")
   autocmd bufnewfile,bufread *.bin,*.arc setlocal filetype=binMode
   
   " Syntax Highlighting for vb-files
-  autocmd BufNewFile,BufRead *.vb setlocal ft=vbnet
+  autocmd BufNewFile,BufRead *.vb,*.cls setlocal ft=vb.net
   " Treat .jst, .json files as JavaScript
   autocmd BufNewFile,BufRead *.js,*.jst,*.json setlocal ft=javascript
   autocmd BufNewFile,BufRead *.js,*.jst,*.json call CorrectBracketHandling()
