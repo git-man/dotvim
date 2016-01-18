@@ -9,62 +9,62 @@ let iCanHazVundle=1
 if has('win32') || has('win64')
 	set runtimepath=$VIM/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$VIM/.vim/after
 	let $HOME=$VIM
-	let vundle_readme=expand('$VIM\.vim\bundle\vundle\README.md')
+	let vundle_readme=expand('$VIM\.vim\bundle\Vundle.vim\README.md')
 
 	if !filereadable(vundle_readme)
 		echo "Installing Vundle.."
 		echo ""
 		exe '!mkdir ' . shellescape(expand("$HOME")) . "\\.vim\\bundle\\"
 		echo "created path..."
-		exe '!git clone https://github.com/gmarik/vundle ' . shellescape(expand("$HOME"))."\\.vim\\bundle\\vundle"
+		exe '!git clone https://github.com/VundleVim/Vundle.vim ' . shellescape(expand("$HOME"))."\\.vim\\bundle\\"
 		let iCanHazVundle=0
 	endif
 
-   let $PATH = 'D:\jsctags;' . $PATH
+   "let $PATH = 'D:\jsctags;' . $PATH
 
 	"let $HOME = substitute($HOME, " ", "\\\\ ", "")
 	"set runtimepath=$HOME/.vim,$HOME/vimfiles,$VIMRUNTIME,$HOME/vimfiles/after,$HOME/.vim/after
 else
-	let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
+	let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')
 
 	if !filereadable(vundle_readme)
 		echo "Installing Vundle.."
 		echo ""
 		silent !mkdir -p ~/.vim/bundle
 		echo $HOME/.vim/bundle
-		silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
+		silent !git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle/
 		let iCanHazVundle=0
 	endif
 endif
 
-set rtp+=$HOME/.vim/bundle/vundle/
+set rtp+=$HOME/.vim/bundle/Vundle.vim/
 call vundle#rc()
-Bundle 'gmarik/vundle'
+Bundle 'https://github.com/VundleVim/Vundle.vim'
 
 " --- My Bundles ---
 " - original repos on github -> username/repo_name
 "Bundle 'Syntastic' "uber awesome syntax and errors highlighter
 "Bundle 'altercation/vim-colors-solarized' "T-H-E colorscheme
-Bundle 'tpope/vim-fugitive'
-Bundle 'taglist-plus'
-Bundle 'jshint.vim'
-Bundle 'ccase.vim'
-Bundle 'project.tar.gz'
-Bundle 'asciidoc.vim'
+Bundle 'https://github.com/tpope/vim-fugitive'
+"Bundle 'taglist-plus'
+"Bundle 'jshint.vim'
+Bundle 'https://github.com/vim-scripts/ccase.vim'
+"Bundle 'project.tar.gz'
+"Bundle 'asciidoc.vim'
 "Bundle 'JavaScript-Indent'
-Bundle 'pangloss/vim-javascript'
+"Bundle 'pangloss/vim-javascript'
 "Bundle 'Javascript-Indentation'
 "Bundle 'Better-Javascript-Indentation'
 "Bundle 'Simple-Javascript-Indenter'
 "Bundle 'lukaszb/vim-web-indent'
-Bundle 'Tabular'
-Bundle 'matchit.zip'
-Bundle 'Align'
+Bundle 'https://github.com/tmhedberg/matchit'
+Bundle 'https://github.com/vim-scripts/Align'
+"Bundle 'Tabular'
 
 " AutomaticLaTeXPlugin ---
 "Bundle 'AutomaticLaTeXPlugin'
 "Bundle 'https://github.com/coot/atp_vim'
-Bundle 'git://git.code.sf.net/p/atp-vim/code'
+"Bundle 'git://git.code.sf.net/p/atp-vim/code'
 " ---
 
 
@@ -330,7 +330,7 @@ set wildmode=longest,list
 
 " *** GUI-Settings
 "set guifont=Monospace\ 10 " sets font
-set guifont=Inconsolata\ Medium\ 14,Monospace\ 10,Inconsolata\ LGC:h14 " sets font tried by order
+set guifont=Inconsolata\ Medium\ 14,Monospace\ 10,Inconsolata\ LGC:h14,Consolas:h13 " sets font tried by order
 set lines=55
 set columns=100
 set mousehide " hide the mouse cursor when typing
