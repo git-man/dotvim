@@ -39,6 +39,8 @@ endif
 
 set rtp+=$HOME/.vim/bundle/Vundle.vim/
 call vundle#rc()
+call vundle#begin()
+
 Bundle 'https://github.com/VundleVim/Vundle.vim'
 
 " --- My Bundles ---
@@ -67,12 +69,18 @@ Bundle 'https://github.com/vim-scripts/Align'
 "Bundle 'git://git.code.sf.net/p/atp-vim/code'
 " ---
 
+"Bundle 'https://github.com/jmcantrell/vim-virtualenv.git'
+"Bundle 'https://github.com/klen/python-mode'
+Plugin 'vim-airline/vim-airline'
+Plugin 'https://github.com/jmcantrell/vim-virtualenv.git'
+Plugin 'https://github.com/vim-scripts/indentpython.vim.git'
 
 " - vim-scripts repos from vim.org site -> script_name
 "Bundle 'FuzzyFinder'
 
 " - non github repos
 "Bundle 'git://git.wincent.com/command-t.git'
+call vundle#end()
 " --- My Bundles END ---
 
 if iCanHazVundle == 0
@@ -180,9 +188,8 @@ if has("autocmd")
 	" Regenerate tags file for my personal wiki
 	autocmd BufWritePost D:/Dokumentation/Wiki/* :helptags D:/Dokumentation/Wiki
 
-  " For making the window of plugin projects fixed in their size
-  autocmd BufWinEnter *.vimprojects setlocal wfw
-  autocmd BufWinEnter *.vimprojects setlocal wfh
+	au BufNewFile,BufRead *.py
+	    \ setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=80 expandtab autoindent
 
   " If no filetype set, set a certain ft
   autocmd BufEnter * if &filetype == "" | setlocal ft=text | endif
@@ -258,7 +265,7 @@ set numberwidth=5
 highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE guifg=DarkGrey guibg=NONE
 " color used for the ColorColumn
 "highlight ColorColumn guibg=#121212
-highlight ColorColumn guibg=#4F4F4F
+highlight ColorColumn guibg=#9C0C20
 
 " Handle unsaved buffers
 set hidden
@@ -330,11 +337,22 @@ set wildmode=longest,list
 
 " *** GUI-Settings
 "set guifont=Monospace\ 10 " sets font
-set guifont=Inconsolata\ Medium\ 14,Monospace\ 10,Inconsolata\ LGC:h14,Consolas:h13 " sets font tried by order
+"set guifont=Inconsolata\ Medium\ 14,Monospace\ 10,Inconsolata\ LGC:h14,Consolas:h13 " sets font tried by order
+set guifont=Consolas:h13 " sets font tried by order
 set lines=55
 set columns=100
 set mousehide " hide the mouse cursor when typing
 set guioptions-=T "remove toolbar
+
+"let g:airline_symbols = {}
+"let g:airline_left_sep = "\u2b80" "use double quotes here
+"let g:airline_left_alt_sep = "\u2b81"
+"let g:airline_right_sep = "\u2b82"
+"let g:airline_right_alt_sep = "\u2b83"
+"let g:airline_symbols.branch = "\u2b60"
+"let g:airline_symbols.readonly = "\u2b64"
+"let g:airline_symbols.linenr = "\u2b61"
+"let g:airline_powerline_fonts=1
 
 " *** Highlight characters that exceed the 80th column ************************
 "if exists('+colorcolumn')
@@ -537,3 +555,45 @@ function! ProtoSkeleton()
 endfunction
 
 nmap <leader>pro mz:execute ProtoSkeleton()<CR> <Esc>
+
+"" Python-mode
+"" Activate rope
+"" Keys:
+"" K             Show python docs
+"" <Ctrl-Space>  Rope autocomplete
+"" <Ctrl-c>g     Rope goto definition
+"" <Ctrl-c>d     Rope show documentation
+"" <Ctrl-c>f     Rope find occurrences
+"" <Leader>b     Set, unset breakpoint (g:pymode_breakpoint enabled)
+"" [[            Jump on previous class or function (normal, visual, operator modes)
+"" ]]            Jump on next class or function (normal, visual, operator modes)
+"" [M            Jump on previous class or method (normal, visual, operator modes)
+"" ]M            Jump on next class or method (normal, visual, operator modes)
+"let g:pymode_rope = 1
+"
+"" Documentation
+"let g:pymode_doc = 1
+"let g:pymode_doc_key = 'K'
+"
+""Linting
+"let g:pymode_lint = 1
+"let g:pymode_lint_checker = "pyflakes,pep8"
+"" Auto check on save
+"let g:pymode_lint_write = 1
+"
+"" Support virtualenv
+"let g:pymode_virtualenv = 1
+"
+"" Enable breakpoints plugin
+"let g:pymode_breakpoint = 1
+"let g:pymode_breakpoint_bind = '<leader>b'
+"
+"" syntax highlighting
+"let g:pymode_syntax = 1
+"let g:pymode_syntax_all = 1
+"let g:pymode_syntax_indent_errors = g:pymode_syntax_all
+"let g:pymode_syntax_space_errors = g:pymode_syntax_all
+"
+"" Don't autofold code
+"let g:pymode_folding = 0
+
