@@ -2,6 +2,10 @@ Installation:
 
    git clone git://github.com/git-man/dotvim.git ~/.vim
 
+   - Python related:
+     * jedi-vim: Install jedi through pip to use it:
+         - pip install jedi
+
 Create symlinks:
 
    Unix based:
