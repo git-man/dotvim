@@ -5,6 +5,8 @@ Installation:
    - Python related:
      * jedi-vim: Install jedi through pip to use it:
          - pip install jedi
+   - Windows related:
+     * You have make your first star with gVim as administrator
 
 Create symlinks:
 

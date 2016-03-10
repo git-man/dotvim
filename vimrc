@@ -189,9 +189,6 @@ if has("autocmd")
 	" Regenerate tags file for my personal wiki
 	autocmd BufWritePost E:/Dokumentation/Wiki/* :helptags E:/Dokumentation/Wiki
 
-"	au BufNewFile,BufRead *.py
-"	    \ setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79 expandtab autoindent smartindent
-
 	au FileType python
 	    \ setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79 expandtab autoindent nosmartindent
 
@@ -284,12 +281,12 @@ vmap <C-j> gj
 vmap <C-k> gk
 vmap <C-4> g$
 vmap <C-^> g^
-vmap <C-0> g^
+vmap <C-0> g0
 nmap <C-j> gj
 nmap <C-k> gk
 nmap <C-4> g$
 nmap <C-^> g^
-nmap <C-0> g^
+nmap <C-0> g0
 
 " sets colorscheme dependent on using either gui or terminal
 set t_Co=256 "enable 256 colors
@@ -341,8 +338,9 @@ set wildmode=longest,list
 
 " *** GUI-Settings
 "set guifont=Monospace\ 10 " sets font
+set guifont=Inconsolata\ Medium\ 14,Monospace\ 10,Consolas:h13 " sets font tried by order
 "set guifont=Inconsolata\ Medium\ 14,Monospace\ 10,Inconsolata\ LGC:h14,Consolas:h13 " sets font tried by order
-set guifont=Consolas:h13 " sets font tried by order
+"set guifont=Consolas:h13 " sets font tried by order
 set lines=55
 set columns=100
 set mousehide " hide the mouse cursor when typing
