@@ -27,7 +27,7 @@ if has('win32') || has('win64')
 	"let $HOME = substitute($HOME, " ", "\\\\ ", "")
 	"set runtimepath=$HOME/.vim,$HOME/vimfiles,$VIMRUNTIME,$HOME/vimfiles/after,$HOME/.vim/after
 else
-	let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
+	let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')
 
 	if !filereadable(vundle_readme)
 		echo "Installing Vundle.."
