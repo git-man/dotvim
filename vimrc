@@ -46,6 +46,7 @@ Bundle 'https://github.com/VundleVim/Vundle.vim'
 " --- My Bundles ---
 " - original repos on github -> username/repo_name
 "Bundle 'Syntastic' "uber awesome syntax and errors highlighter
+Plugin 'https://github.com/scrooloose/syntastic'
 "Bundle 'altercation/vim-colors-solarized' "T-H-E colorscheme
 Bundle 'https://github.com/tpope/vim-fugitive'
 "Bundle 'taglist-plus'
@@ -141,6 +142,9 @@ if &t_Co > 2 || has("gui_running")
   set hlsearch
 endif
 
+" Ignore whitespace in vimdiff
+set diffopt+=iwhite
+
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
   " Enable file type detection.
@@ -159,6 +163,7 @@ if has("autocmd")
 		\ tags=tags,./tags,C:\dotnetReference\RefSrc\Source\.Net\4.0\DEVDIV_TFS\Dev10\Releases\RTMRel\tags;
 		\ foldmethod=syntax
 		\ foldlevelstart=0
+	autocmd FileType groovy setlocal tw=0 autoindent
   autocmd FileType vim setlocal ts=2 sts=2 sw=2 noexpandtab fo="" tw=0
   autocmd FileType mail,text,asciidoc,html setlocal spell spelllang=en,de
   autocmd FileType asciidoc
@@ -182,6 +187,7 @@ if has("autocmd")
   " Treat .jst, .json files as JavaScript
   autocmd BufNewFile,BufRead *.js,*.jst,*.json setlocal ft=javascript
   autocmd BufNewFile,BufRead *.js,*.jst,*.json call CorrectBracketHandling()
+  autocmd BufNewFile,BufRead *.groovy setlocal ft=groovy
 
   autocmd BufNewFile,BufRead *.cs setlocal ft=cs
   autocmd BufNewFile,BufRead *.cs call CorrectBracketHandling()
@@ -227,7 +233,7 @@ if !exists(":DiffOrig")
 endif
 
 " switch to pastemode
-set pastetoggle=<F2>
+"set pastetoggle=<F2>
 
 " disable "ding" sounds
 set vb t_vb=
@@ -379,7 +385,7 @@ map <leader>es :sp ~~
 map <leader>ev :vsp ~~
 
 " Strip trailing whitspaces ***************************************************
-nnoremap <silent> <F5> :call <SID>StripTrailingWhitespaces()<CR>
+nnoremap <silent> <F1> :call <SID>StripTrailingWhitespaces()<CR>
 function! <SID>StripTrailingWhitespaces()
     " Preparation: save last search, and cursor position.
     let _s=@/
@@ -558,3 +564,9 @@ endfunction
 
 nmap <leader>pro mz:execute ProtoSkeleton()<CR> <Esc>
 
+" Syntastic specific settings -----
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 1
+" Syntastic END -----
