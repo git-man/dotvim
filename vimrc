@@ -5,6 +5,8 @@ set nocompatible
 " === Vundle Section (Plugin-Manager) ==========================================
 filetype off	" required
 
+"set rtp+=~/.vim/bundle/Vundle.vim
+
 let iCanHazVundle=1
 if has('win32') || has('win64')
 	set runtimepath=$VIM/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$VIM/.vim/after
@@ -31,8 +33,8 @@ else
 		echo "Installing Vundle.."
 		echo ""
 		silent !mkdir -p ~/.vim/bundle
-		echo $HOME/.vim/bundle
-		silent !git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle/
+		echo "$HOME/.vim/bundle"
+		silent !git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 		let iCanHazVundle=0
 	endif
 endif
@@ -41,17 +43,18 @@ set rtp+=$HOME/.vim/bundle/Vundle.vim/
 call vundle#rc()
 call vundle#begin()
 
-Bundle 'https://github.com/VundleVim/Vundle.vim'
+Plugin 'VundleVim/Vundle.vim'
+"Bundle 'https://github.com/VundleVim/Vundle.vim'
 
 " --- My Bundles ---
 " - original repos on github -> username/repo_name
 "Bundle 'Syntastic' "uber awesome syntax and errors highlighter
 Plugin 'https://github.com/scrooloose/syntastic'
 "Bundle 'altercation/vim-colors-solarized' "T-H-E colorscheme
-Bundle 'https://github.com/tpope/vim-fugitive'
+Plugin 'https://github.com/tpope/vim-fugitive'
 "Bundle 'taglist-plus'
 "Bundle 'jshint.vim'
-Bundle 'https://github.com/vim-scripts/ccase.vim'
+Plugin 'https://github.com/vim-scripts/ccase.vim'
 "Bundle 'project.tar.gz'
 "Bundle 'asciidoc.vim'
 "Bundle 'JavaScript-Indent'
@@ -60,8 +63,8 @@ Bundle 'https://github.com/vim-scripts/ccase.vim'
 "Bundle 'Better-Javascript-Indentation'
 "Bundle 'Simple-Javascript-Indenter'
 "Bundle 'lukaszb/vim-web-indent'
-Bundle 'https://github.com/tmhedberg/matchit'
-Bundle 'https://github.com/vim-scripts/Align'
+Plugin 'https://github.com/tmhedberg/matchit'
+Plugin 'https://github.com/vim-scripts/Align'
 "Bundle 'Tabular'
 
 " AutomaticLaTeXPlugin ---
@@ -88,7 +91,7 @@ call vundle#end()
 if iCanHazVundle == 0
 	echo "Installing Bundles, please ignore key map error messages"
 	echo ""
-	:BundleInstall
+	:PluginInstall
 endif
 
 filetype plugin indent on	" required
