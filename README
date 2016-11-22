@@ -14,6 +14,8 @@ Installation:
      * Set it in cmd and start gVim after it in this session:
          - set set http_proxy=http://proxy.<company>.de:81
          - set set https_proxy=http://proxy.<company>.de:81
+     * https instead of git urls:
+         - git config --global url.https://github.com/.insteadOf git://github.com/
 
 Create symlinks:
 
