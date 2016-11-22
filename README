@@ -22,4 +22,3 @@ Create symlinks:
       (Optional) ln -s ~/.vim/gvimrc ~/.gvimrc
    Windows based:
       fsutil hardlink create <link to vimrc> <vimrc>
-
