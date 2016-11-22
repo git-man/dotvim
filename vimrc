@@ -18,7 +18,7 @@ if has('win32') || has('win64')
 		echo ""
 		exe '!mkdir ' . shellescape(expand("$HOME")) . "\\.vim\\bundle\\"
 		echo "created path..."
-		exe '!git clone https://github.com/VundleVim/Vundle.vim ' . shellescape(expand("$HOME"))."\\.vim\\bundle\\"
+		exe '!git clone https://github.com/VundleVim/Vundle.vim ' . shellescape(expand("$HOME"))."\\.vim\\bundle\\Vundle.vim"
 		let iCanHazVundle=0
 	endif
 
