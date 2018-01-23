@@ -9,6 +9,8 @@ filetype off	" required
 
 let iCanHazVundle=1
 if has('win32') || has('win64')
+	"set shell=cmd.exe
+	"let &shell='cmd.exe'
 	set runtimepath=$VIM/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$VIM/.vim/after
 	let $HOME=$VIM
 	let vundle_readme=expand('$VIM\.vim\bundle\Vundle.vim\README.md')
@@ -22,11 +24,24 @@ if has('win32') || has('win64')
 		let iCanHazVundle=0
 	endif
 
+	"redir =>userdom
+	"silent exe 'echo $userdomain'
+	"redir END
+	"echo $userdom
+	" Set proxy for 
+   "let userdom=exe 'echo $userdomain'
+	"if userdom == 'WW004'
+		"silent exe '!set http_proxy=http://proxy.siemens.de:81'
+		"silent exe '!set https_proxy=http://proxy.siemens.de:81'
+	"endif
+
+
    "let $PATH = 'D:\jsctags;' . $PATH
 
 	"let $HOME = substitute($HOME, " ", "\\\\ ", "")
 	"set runtimepath=$HOME/.vim,$HOME/vimfiles,$VIMRUNTIME,$HOME/vimfiles/after,$HOME/.vim/after
 else
+	"set shell=/bin/bash
 	let vundle_readme=expand('~/.vim/bundle/Vundle.vim/README.md')
 
 	if !filereadable(vundle_readme)
@@ -79,6 +94,11 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'https://github.com/jmcantrell/vim-virtualenv.git'
 Plugin 'https://github.com/vim-scripts/indentpython.vim.git'
 Plugin 'https://github.com/davidhalter/jedi-vim.git'
+Plugin 'https://github.com/ctrlpvim/ctrlp.vim.git'
+Plugin 'https://github.com/tpope/vim-dispatch.git'
+Plugin 'https://github.com/OmniSharp/omnisharp-vim.git'
+Plugin 'https://github.com/PProvost/vim-ps1.git'
+Plugin 'https://github.com/SirVer/ultisnips'
 
 " - vim-scripts repos from vim.org site -> script_name
 "Bundle 'FuzzyFinder'
@@ -161,12 +181,13 @@ if has("autocmd")
 		\ colorcolumn=+1 comments-=s1:/*,mb:*,ex:*/ comments+=fb:->,fb:-,fb:+
   autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
   autocmd FileType cs setlocal ts=4 sts=4 sw=4 noexpandtab tw=80
-		\ efm=\ %#%f(%l\\\,%c):\ error\ CS%n:\ %m
-		\ makeprg=msbuild\ /nologo\ /v:q\ /property:Configuration=Debug;GenerateFullPaths=true
-		\ tags=tags,./tags,C:\dotnetReference\RefSrc\Source\.Net\4.0\DEVDIV_TFS\Dev10\Releases\RTMRel\tags;
+		"\ efm=\ %#%f(%l\\\,%c):\ error\ CS%n:\ %m
+		"\ makeprg=msbuild\ /nologo\ /v:q\ /property:Configuration=Debug;GenerateFullPaths=true
+		"\ tags=tags,./tags,C:\dotnetReference\RefSrc\Source\.Net\4.0\DEVDIV_TFS\Dev10\Releases\RTMRel\tags;
 		\ foldmethod=syntax
 		\ foldlevelstart=0
-	autocmd FileType groovy setlocal tw=0 autoindent
+	autocmd FileType groovy setlocal ts=3 sts=3 sw=3 noexpandtab tw=0 autoindent
+	autocmd FileType ps1 setlocal ts=4 sts=4 sw=4 expandtab tw=0 autoindent
   autocmd FileType vim setlocal ts=2 sts=2 sw=2 noexpandtab fo="" tw=0
   autocmd FileType mail,text,asciidoc,html setlocal spell spelllang=en,de
   autocmd FileType asciidoc
@@ -188,12 +209,15 @@ if has("autocmd")
   " Syntax Highlighting for vb-files
   autocmd BufNewFile,BufRead *.vb,*.cls setlocal ft=vb.net
   " Treat .jst, .json files as JavaScript
-  autocmd BufNewFile,BufRead *.js,*.jst,*.json setlocal ft=javascript
-  autocmd BufNewFile,BufRead *.js,*.jst,*.json call CorrectBracketHandling()
+  autocmd BufNewFile,BufRead *.js,*.jst setlocal ft=javascript
+  autocmd BufNewFile,BufRead *.js,*.jst call CorrectBracketHandling()
   autocmd BufNewFile,BufRead *.groovy setlocal ft=groovy
 
-  autocmd BufNewFile,BufRead *.cs setlocal ft=cs
-  autocmd BufNewFile,BufRead *.cs call CorrectBracketHandling()
+	autocmd BufNewFile,BufRead *.json setlocal ft=json
+  autocmd BufNewFile,BufRead *.json call CorrectBracketHandling()
+
+  autocmd BufNewFile,BufRead *.cs,*.cake setlocal ft=cs
+  autocmd BufNewFile,BufRead *.cs,*.cake call CorrectBracketHandling()
 
 	" Regenerate tags file for my personal wiki
 	autocmd BufWritePost E:/Dokumentation/Wiki/* :helptags E:/Dokumentation/Wiki
@@ -573,3 +597,135 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 1
 " Syntastic END -----
+
+"""""""""""""""""""""""""""""""""""
+" Omnisharp specific settings -----
+"""""""""""""""""""""""""""""""""""
+"This is the default value, setting it isn't actually necessary
+let g:OmniSharp_host = "http://localhost:2000"
+
+"Set the type lookup function to use the preview window instead of the status line
+"let g:OmniSharp_typeLookupInPreview = 1
+
+"Timeout in seconds to wait for a response from the server
+let g:OmniSharp_timeout = 10
+
+"Look for a global.json instead of a sln file
+"let g:OmniSharp_prefer_global_sln = 1
+
+"Showmatch significantly slows down omnicomplete
+"when the first match contains parentheses.
+set noshowmatch
+
+"Super tab settings - uncomment the next 4 lines
+"let g:SuperTabDefaultCompletionType = 'context'
+"let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
+"let g:SuperTabDefaultCompletionTypeDiscovery = ["&omnifunc:<c-x><c-o>","&completefunc:<c-x><c-n>"]
+"let g:SuperTabClosePreviewOnPopupClose = 1
+
+"don't autoselect first item in omnicomplete, show if only one item (for preview)
+"remove preview if you don't want to see any documentation whatsoever.
+set completeopt=longest,menuone,preview
+" Fetch full documentation during omnicomplete requests.
+" There is a performance penalty with this (especially on Mono)
+" By default, only Type/Method signatures are fetched. Full documentation can still be fetched when
+" you need it with the :OmniSharpDocumentation command.
+" let g:omnicomplete_fetch_full_documentation=1
+
+"Move the preview window (code documentation) to the bottom of the screen, so it doesn't move the code!
+"You might also want to look at the echodoc plugin
+set splitbelow
+
+" Get Code Issues and syntax errors
+"let g:syntastic_cs_checkers = ['syntax', 'semantic', 'issues']
+" If you are using the omnisharp-roslyn backend, use the following
+let g:syntastic_cs_checkers = ['code_checker']
+augroup omnisharp_commands
+    autocmd!
+
+    "Set autocomplete function to OmniSharp (if not using YouCompleteMe completion plugin)
+    autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
+
+    " Synchronous build (blocks Vim)
+    "autocmd FileType cs nnoremap <F5> :wa!<cr>:OmniSharpBuild<cr>
+    " Builds can also run asynchronously with vim-dispatch installed
+    autocmd FileType cs nnoremap <leader>b :wa!<cr>:OmniSharpBuildAsync<cr>
+    " automatic syntax check on events (TextChanged requires Vim 7.4)
+    autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
+
+    " Automatically add new cs files to the nearest project on save
+    autocmd BufWritePost *.cs call OmniSharp#AddToProject()
+
+    "show type information automatically when the cursor stops moving
+    autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+
+    "The following commands are contextual, based on the current cursor position.
+
+    autocmd FileType cs nnoremap gd :OmniSharpGotoDefinition<cr>
+    autocmd FileType cs nnoremap <leader>fi :OmniSharpFindImplementations<cr>
+    autocmd FileType cs nnoremap <leader>ft :OmniSharpFindType<cr>
+    autocmd FileType cs nnoremap <leader>fs :OmniSharpFindSymbol<cr>
+    autocmd FileType cs nnoremap <leader>fu :OmniSharpFindUsages<cr>
+    "finds members in the current buffer
+    autocmd FileType cs nnoremap <leader>fm :OmniSharpFindMembers<cr>
+    " cursor can be anywhere on the line containing an issue
+    autocmd FileType cs nnoremap <leader>x  :OmniSharpFixIssue<cr>
+    autocmd FileType cs nnoremap <leader>fx :OmniSharpFixUsings<cr>
+    autocmd FileType cs nnoremap <leader>tt :OmniSharpTypeLookup<cr>
+    autocmd FileType cs nnoremap <leader>dc :OmniSharpDocumentation<cr>
+    "navigate up by method/property/field
+    autocmd FileType cs nnoremap <C-K> :OmniSharpNavigateUp<cr>
+    "navigate down by method/property/field
+    autocmd FileType cs nnoremap <C-J> :OmniSharpNavigateDown<cr>
+
+augroup END
+
+
+" this setting controls how long to wait (in ms) before fetching type / symbol information.
+set updatetime=500
+" Remove 'Press Enter to continue' message when type information is longer than one line.
+set cmdheight=2
+
+" Contextual code actions (requires CtrlP or unite.vim)
+nnoremap <leader><space> :OmniSharpGetCodeActions<cr>
+" Run code actions with text selected in visual mode to extract method
+vnoremap <leader><space> :call OmniSharp#GetCodeActions('visual')<cr>
+
+" rename with dialog
+nnoremap <leader>nm :OmniSharpRename<cr>
+nnoremap <F2> :OmniSharpRename<cr>
+" rename without dialog - with cursor on the symbol to rename... ':Rename newname'
+command! -nargs=1 Rename :call OmniSharp#RenameTo("<args>")
+
+" Force OmniSharp to reload the solution. Useful when switching branches etc.
+nnoremap <leader>rl :OmniSharpReloadSolution<cr>
+nnoremap <leader>cf :OmniSharpCodeFormat<cr>
+" Load the current .cs file to the nearest project
+nnoremap <leader>tp :OmniSharpAddToProject<cr>
+
+" Start the omnisharp server for the current solution
+nnoremap <leader>ss :OmniSharpStartServer<cr>
+nnoremap <leader>sp :OmniSharpStopServer<cr>
+
+" Add syntax highlighting for types and interfaces
+nnoremap <leader>th :OmniSharpHighlightTypes<cr>
+"Don't ask to save when changing buffers (i.e. when jumping to a type definition)
+set hidden
+
+" Enable snippet completion, requires completeopt-=preview
+let g:OmniSharp_want_snippet=1
+
+" OmniSharp-vim can now be run with omnisharp-roslyn instead of the OmniSharp
+" server. To switch, write one of the below lines to your vimrc.
+"let g:OmniSharp_server_type = 'v1'
+let g:OmniSharp_server_type = 'roslyn'
+
+" Mappings for running NUnitLite tests
+"nnoremap <leader>rt :OmniSharpRunTests<cr>
+"nnoremap <leader>rf :OmniSharpRunTestFixture<cr>
+"nnoremap <leader>ra :OmniSharpRunAllTests<cr>
+"nnoremap <leader>rlt :OmniSharpRunLastTests<cr>
+
+"""""""""""""""""""""""""""""""""""
+" Omnisharp END
+"""""""""""""""""""""""""""""""""""
