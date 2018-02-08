@@ -98,7 +98,13 @@ Plugin 'https://github.com/ctrlpvim/ctrlp.vim.git'
 Plugin 'https://github.com/tpope/vim-dispatch.git'
 Plugin 'https://github.com/OmniSharp/omnisharp-vim.git'
 Plugin 'https://github.com/PProvost/vim-ps1.git'
+Plugin 'https://github.com/Shougo/deoplete.nvim'
+Plugin 'https://github.com/roxma/nvim-yarp'
+Plugin 'https://github.com/roxma/vim-hug-neovim-rpc'
 Plugin 'https://github.com/SirVer/ultisnips'
+" Snippets are separated from the engine. Add this if you want them:
+Plugin 'honza/vim-snippets'
+
 
 " - vim-scripts repos from vim.org site -> script_name
 "Bundle 'FuzzyFinder'
@@ -443,56 +449,56 @@ endfunction
 " JavaScript JSON extraction
 nmap <leader>jt 0 % % i<CR><ESC> % a <CR><ESC> k :.!python -mjson.tool<CR> y% u :vnew!<CR> p :set ft=javascript<CR><ESC>
 
-" C# tags generation
-nmap <leader>cst :!ctags.exe -R --extra="+fq" --fields=+ianmzS --c\#-kinds=cgimnps --languages=c\#<CR>
+"" C# tags generation
+"nmap <leader>cst :!ctags.exe -R --extra="+fq" --fields=+ianmzS --c\#-kinds=cgimnps --languages=c\#<CR>
 
 " *** Project plugin related settings *****************************************
 "map <A-S-p> :Project<CR>
 "map <A-S-o> :Project<CR>:redraw<CR>/
 "nmap <silent> <F3> <Plug>ToggleProject
-let g:proj_window_width = 30
-let g:proj_window_increment = 50
-let g:proj_flags="imst"
+"let g:proj_window_width = 30
+"let g:proj_window_increment = 50
+"let g:proj_flags="imst"
 " *****************************************************************************
 
 
 " *** OmniCppComplete *********************************************************
-" :inoremap <expr> <CR> pumvisible() ? "\<c-y>" : "\<c-g>u\<CR>"
-" set completeopt as don't show menu and preview
-set completeopt=menuone
-" Popup menu hightLight Group
-"highlight Pmenu ctermbg=13 guibg=LightGray
-"highlight PmenuSel ctermbg=7 guibg=DarkBlue guifg=White
-"highlight PmenuSbar ctermbg=7 guibg=DarkGray
-"highlight PmenuThumb guibg=Black
-" use global scope search
-let OmniCpp_GlobalScopeSearch = 1
-" 0 = namespaces disabled
-" 1 = search namespaces in the current buffer
-" 2 = search namespaces in the current buffer and in included files
-let OmniCpp_NamespaceSearch = 1
-" 0 = auto
-" 1 = always show all members
-let OmniCpp_DisplayMode = 1
-" 0 = don't show scope in abbreviation
-" 1 = show scope in abbreviation and remove the last column
-let OmniCpp_ShowScopeInAbbr = 0
-" This option allows to display the prototype of a function in the abbreviation part of the popup menu.
-" 0 = don't display prototype in abbreviation
-" 1 = display prototype in abbreviation
-let OmniCpp_ShowPrototypeInAbbr = 1
-" This option allows to show/hide the access information ('+', '#', '-') in the popup menu.
-" 0 = hide access
-" 1 = show access
-let OmniCpp_ShowAccess = 1
-" This option can be use if you don't want to parse using namespace declarations in included files and want to add namespaces that are always used in your project.
-let OmniCpp_DefaultNamespaces = ["std"]
-" Complete Behaviour
-let OmniCpp_MayCompleteDot = 0
-let OmniCpp_MayCompleteArrow = 0
-let OmniCpp_MayCompleteScope = 0
-" When 'completeopt' does not contain "longest", Vim automatically select the first entry of the popup menu. You can change this behaviour with the OmniCpp_SelectFirstItem option.
-let OmniCpp_SelectFirstItem = 0
+"" :inoremap <expr> <CR> pumvisible() ? "\<c-y>" : "\<c-g>u\<CR>"
+"" set completeopt as don't show menu and preview
+"set completeopt=menuone
+"" Popup menu hightLight Group
+""highlight Pmenu ctermbg=13 guibg=LightGray
+""highlight PmenuSel ctermbg=7 guibg=DarkBlue guifg=White
+""highlight PmenuSbar ctermbg=7 guibg=DarkGray
+""highlight PmenuThumb guibg=Black
+"" use global scope search
+"let OmniCpp_GlobalScopeSearch = 1
+"" 0 = namespaces disabled
+"" 1 = search namespaces in the current buffer
+"" 2 = search namespaces in the current buffer and in included files
+"let OmniCpp_NamespaceSearch = 1
+"" 0 = auto
+"" 1 = always show all members
+"let OmniCpp_DisplayMode = 1
+"" 0 = don't show scope in abbreviation
+"" 1 = show scope in abbreviation and remove the last column
+"let OmniCpp_ShowScopeInAbbr = 0
+"" This option allows to display the prototype of a function in the abbreviation part of the popup menu.
+"" 0 = don't display prototype in abbreviation
+"" 1 = display prototype in abbreviation
+"let OmniCpp_ShowPrototypeInAbbr = 1
+"" This option allows to show/hide the access information ('+', '#', '-') in the popup menu.
+"" 0 = hide access
+"" 1 = show access
+"let OmniCpp_ShowAccess = 1
+"" This option can be use if you don't want to parse using namespace declarations in included files and want to add namespaces that are always used in your project.
+"let OmniCpp_DefaultNamespaces = ["std"]
+"" Complete Behaviour
+"let OmniCpp_MayCompleteDot = 0
+"let OmniCpp_MayCompleteArrow = 0
+"let OmniCpp_MayCompleteScope = 0
+"" When 'completeopt' does not contain "longest", Vim automatically select the first entry of the popup menu. You can change this behaviour with the OmniCpp_SelectFirstItem option.
+"let OmniCpp_SelectFirstItem = 0
 " *****************************************************************************
 
 " *** Tell Vim where to search for tags ***************************************
@@ -565,29 +571,29 @@ nmap <leader>xml :silent 1,$!xmllint --format --recover - 2>/dev/null<CR>
 
 
 
-function! ProtoSkeleton()
-  let s:line=line(".")
-  call setline(s:line,"Protokoll")
-  call append(s:line,"=========")
-  call append(s:line+1,"")
-  call append(s:line+2,"Thema: %%%")
-  call append(s:line+3,"Teilnehmer: %%%")
-  call append(s:line+4,"Datum: ".strftime("%a, %d %b %Y %H:%M:%S %z"))
-  call append(s:line+5,"")
-  call append(s:line+6,"Ausgangssituation")
-  call append(s:line+7,"-----------------")
-  call append(s:line+8,"%%%")
-  call append(s:line+9,"")
-  call append(s:line+10,"Lösung")
-  call append(s:line+11,"------")
-  call append(s:line+12,"%%%")
-  call append(s:line+13,"")
-  call append(s:line+14,"ToDo")
-  call append(s:line+15,"----")
-  call append(s:line+16,"%%%")
-  call append(s:line+17,"")
-  unlet s:line
-endfunction
+"function! ProtoSkeleton()
+"  let s:line=line(".")
+"  call setline(s:line,"Protokoll")
+"  call append(s:line,"=========")
+"  call append(s:line+1,"")
+"  call append(s:line+2,"Thema: %%%")
+"  call append(s:line+3,"Teilnehmer: %%%")
+"  call append(s:line+4,"Datum: ".strftime("%a, %d %b %Y %H:%M:%S %z"))
+"  call append(s:line+5,"")
+"  call append(s:line+6,"Ausgangssituation")
+"  call append(s:line+7,"-----------------")
+"  call append(s:line+8,"%%%")
+"  call append(s:line+9,"")
+"  call append(s:line+10,"Lösung")
+"  call append(s:line+11,"------")
+"  call append(s:line+12,"%%%")
+"  call append(s:line+13,"")
+"  call append(s:line+14,"ToDo")
+"  call append(s:line+15,"----")
+"  call append(s:line+16,"%%%")
+"  call append(s:line+17,"")
+"  unlet s:line
+"endfunction
 
 nmap <leader>pro mz:execute ProtoSkeleton()<CR> <Esc>
 
@@ -713,7 +719,9 @@ nnoremap <leader>th :OmniSharpHighlightTypes<cr>
 set hidden
 
 " Enable snippet completion, requires completeopt-=preview
+set completeopt-=preview 
 let g:OmniSharp_want_snippet=1
+
 
 " OmniSharp-vim can now be run with omnisharp-roslyn instead of the OmniSharp
 " server. To switch, write one of the below lines to your vimrc.
@@ -728,4 +736,54 @@ let g:OmniSharp_server_type = 'roslyn'
 
 """""""""""""""""""""""""""""""""""
 " Omnisharp END
+"""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""
+" UltiSnips specific settings
+"""""""""""""""""""""""""""""""""""
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+
+"""""""""""""""""""""""""""""""""""
+" UltiSnips END
+"""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""
+" vim-hug-neovim-rpc specific settings
+"""""""""""""""""""""""""""""""""""
+if has('python3') && has("pythonx")
+	set pyxversion=3
+	:python3 import neovim
+	set encoding=utf-8
+elseif has('python') && has("pythonx")
+	set pyxversion=2
+	:python import neovim
+	set encoding=utf-8
+endif
+
+"""""""""""""""""""""""""""""""""""
+" vim-hug-neovim-rpc END
+"""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""
+" nvim-yarp specific settings
+"""""""""""""""""""""""""""""""""""
+let g:python3_host_prog = 'D:\Python36-32\python.exe'
+"""""""""""""""""""""""""""""""""""
+" nvim-yarp END
+"""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""""""""""""""""""
+" Deoplete specific settings
+"""""""""""""""""""""""""""""""""""
+" Use deoplete.
+let g:deoplete#enable_at_startup = 1
+
+"""""""""""""""""""""""""""""""""""
+" Deoplete END
 """""""""""""""""""""""""""""""""""
