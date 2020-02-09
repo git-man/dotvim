@@ -1,4 +1,4 @@
-# ignore the 'bundle' directory
-bundle/**/*
+# ignore the 'pack' directory
+pack/**/*
 # ignore 'spell' dir
 spell/**/*
