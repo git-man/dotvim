@@ -1,10 +1,14 @@
-# Dotvim
+# My Dotvim
 
-Since Version 8 of Vim, the "package" ("pack") feature has made it easy to
-install plugins without relying on a plugin manager such as vundle.
+Since Version 8 of Vim, the *package* (*pack*) feature has made it easy to
+install plugins without relying on a plugin manager such as *vundle*.
 Nevertheless managing the plugins by hand or manually written scripts to keep
-all the git repos up-to-date is tedious. Therefore the plugin minpac minimal
-package manager has been introduced, which adds more convenient handling.
+all the git repos up-to-date is tedious. Therefore the plugin **minpac** (*minimal
+package manager*) has been introduced, which adds more convenient handling.
+
+This fact has been incorporated within the last update.
+
+Please have a look into the **.vimrc** file for more information.
 
 ## Installation
 
