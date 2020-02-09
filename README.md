@@ -10,44 +10,44 @@ package manager has been introduced, which adds more convenient handling.
 
 Unix based:
 ```
-  git clone git://github.com/git-man/dotvim.git ~/.vim
+git clone git://github.com/git-man/dotvim.git ~/.vim
 ```
 Windows based:
 ```
-  git clone git://github.com/git-man/dotvim.git %HOME%\.vim
+git clone git://github.com/git-man/dotvim.git %HOME%\.vim
 ```
 
 ### Create symlinks to finalize the installation
 
 Unix based:
 ```
-  ln -s ~/.vim/vimrc ~/.vimrc
-  (Optional) ln -s ~/.vim/gvimrc ~/.gvimrc
+ln -s ~/.vim/vimrc ~/.vimrc
+(Optional) ln -s ~/.vim/gvimrc ~/.gvimrc
 ```
 Windows based:
 ```
-  fsutil hardlink create <link to vimrc> <vimrc>
+fsutil hardlink create <link to vimrc> <vimrc>
 ```
 
-## FAQ
+## FAQs
 
 > Problems on connection --\> Proxy?
 
 Set it in git:
 ```
-  - git config --global http.proxy http://<proxyhost>:<proxyport>
-  - git config --global https.proxy http://<proxyhost>:<proxyport>
+git config --global http.proxy http://<proxyhost>:<proxyport>
+git config --global https.proxy http://<proxyhost>:<proxyport>
 ```
 
 Set it in cmd and start gVim after it in this session:
 ```
-  - set set http_proxy=http://proxy.<company>.de:81
-  - set set https_proxy=http://proxy.<company>.de:81
+set http_proxy=http://proxy.<company>.de:81
+set set https_proxy=http://proxy.<company>.de:81
 ```
 
 https instead of git urls:
 ```
-  - git config --global url.https://github.com/.insteadOf git://github.com/
+git config --global url.https://github.com/.insteadOf git://github.com/
 ```
 
 
