@@ -60,7 +60,7 @@ highlight ColorColumn guibg=#9C0C20
 set synmaxcol=400
 
 " Sets font tried by order
-set guifont=Inconsolata\ Medium\ 14,Monospace\ 10,Consolas:h13 
+set guifont=Inconsolata\ Medium\ 19,Monospace\ 15,Consolas:h13 
 
 " Full screen at startup
 if has("gui_win32")	" NT Windows
@@ -111,10 +111,11 @@ set numberwidth=5
 
 " Define how to display invisible characters like EOLs
 if has('win32') || has('win64')
-	" Use the same symbols as TextMate for tabstops and EOLs
-	set lcs=tab:»\ ,eol:¬,trail:·
+	set lcs=tab:>-,eol:$,nbsp:~,trail:â€¢
+	let &showbreak = '^'
 else
-	set lcs=tab:â–¸\ ,eol:Â¬,trail:·
+	set lcs=tab:>-,space:.,eol:$,nbsp:~,trail:â€¢
+	let &showbreak = '^'
 endif
 " ----------------------------------------------------------------------------
 

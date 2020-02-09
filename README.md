@@ -21,6 +21,18 @@ Windows based:
 git clone git://github.com/git-man/dotvim.git %HOME%\.vim
 ```
 
+### Setup minpac
+
+Before starting (G)Vim some "bootstrapping" for *minpac* need to be done.
+
+In the just created `.vim` directory:
+
+```
+mkdir -p pack/minpac/opt
+cd pack/minpac/opt
+git clone https://github.com/k-takata/minpac.git
+```
+
 ### Create symlinks to finalize the installation
 
 Unix based:
