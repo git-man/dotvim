@@ -36,6 +36,9 @@ call minpac#add('morhetz/gruvbox')
 call minpac#add('godlygeek/tabular')
 call minpac#add('PProvost/vim-ps1')
 call minpac#add('tpope/vim-fugitive')
+call minpac#add('editorconfig/editorconfig-vim')
+call minpac#add('skywind3000/asyncrun.vim')
+call minpac#add('vhdirk/vim-cmake')
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
@@ -111,10 +114,10 @@ set numberwidth=5
 
 " Define how to display invisible characters like EOLs
 if has('win32') || has('win64')
-	set lcs=tab:>-,eol:$,nbsp:~,trail:•
+	set lcs=tab:>-,space:.,eol:$,nbsp:~,trail:.
 	let &showbreak = '^'
 else
-	set lcs=tab:>-,space:.,eol:$,nbsp:~,trail:•
+	set lcs=tab:>-,space:.,eol:$,nbsp:~,trail:.
 	let &showbreak = '^'
 endif
 " ----------------------------------------------------------------------------
@@ -269,6 +272,14 @@ endif
 " Windows builds:
 " https://code.google.com/archive/p/cscope-win32/
 " https://github.com/srtlg/cscope-win32
+" ---
+" ----------------------------------------------------------------------------
+
+" ----------------------------------------------------------------------------
+" Plugin related settings
+" ----------------------------------------------------------------------------
+" EditorConfig settings ---
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 " ---
 " ----------------------------------------------------------------------------
 
