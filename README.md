@@ -42,7 +42,7 @@ ln -s ~/.vim/vimrc ~/.vimrc
 ```
 Windows based:
 ```
-fsutil hardlink create <link to vimrc> <vimrc>
+mklink <link to .vimrc> <target .vimrc>
 ```
 
 ## FAQs

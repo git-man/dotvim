@@ -31,14 +31,25 @@ command! PackClean call minpac#clean()
 " ----------------------------------------------------------------------------
 " Install/use the following bunch of packages
 " ----------------------------------------------------------------------------
-call minpac#add('tpope/vim-unimpaired')
-call minpac#add('morhetz/gruvbox')
-call minpac#add('godlygeek/tabular')
-call minpac#add('PProvost/vim-ps1')
-call minpac#add('tpope/vim-fugitive')
-call minpac#add('editorconfig/editorconfig-vim')
+" Asynchronous related making use of Vims job feature 8+
 call minpac#add('skywind3000/asyncrun.vim')
+" Useful mappings
+call minpac#add('tpope/vim-unimpaired')
+" Syntax highlighting
+call minpac#add('morhetz/gruvbox')
+call minpac#add('PProvost/vim-ps1')
+" Formatting
+call minpac#add('godlygeek/tabular')
+" Version control
+call minpac#add('tpope/vim-fugitive')
+" Common editor config to follow coding guidelines
+call minpac#add('editorconfig/editorconfig-vim')
+" CMake related
 call minpac#add('vhdirk/vim-cmake')
+" File finding and searching, see:
+" https://github.com/ctrlpvim/ctrlp.vim
+" https://www.mattlayman.com/blog/2019/supercharging-vim-navigate-files-instantly/
+call minpac#add('ctrlpvim/ctrlp.vim')
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
@@ -208,8 +219,8 @@ if has("autocmd")
   autocmd FileType netrw setl bufhidden=wipe
   autocmd FileType cpp setl ts=4 sts=4 sw=4 noexpandtab tw=0 cindent
     \ cino=j1,(0
-  autocmd FileType yaml setl ts=2 sts=2 sw=2 expandtab tw=0 smartindent
-    \ autoindent
+  autocmd FileType yaml,markdown setl ts=2 sts=2 sw=2 expandtab tw=0
+    \ autoindent smartindent
   autocmd BufNewFile,BufRead *.rts,*.rrr setlocal ft=cpp
 else
   " set autoindenting on, indents like the previous line
@@ -278,9 +289,18 @@ endif
 " ----------------------------------------------------------------------------
 " Plugin related settings
 " ----------------------------------------------------------------------------
-" EditorConfig settings ---
+" CtrlP
+" -----
+if executable('rg')
+  let g:ctrlp_user_command = 'rg %s --files --hidden --color=never --glob ""'
+endif
+" Mapping to find buffer by CtrlP
+nnoremap <Leader>b :CtrlPBuffer<CR>
+" -----
+" EditorConfig
+" ------------
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
-" ---
+" ------------
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
