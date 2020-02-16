@@ -50,6 +50,7 @@ call minpac#add('vhdirk/vim-cmake')
 " https://github.com/ctrlpvim/ctrlp.vim
 " https://www.mattlayman.com/blog/2019/supercharging-vim-navigate-files-instantly/
 call minpac#add('ctrlpvim/ctrlp.vim')
+call minpac#add('mhinz/vim-grepper')
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
@@ -296,7 +297,23 @@ if executable('rg')
 endif
 " Mapping to find buffer by CtrlP
 nnoremap <Leader>b :CtrlPBuffer<CR>
+" Ignore version control related meta data
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 " -----
+" vim-grepper
+" -----------
+" Define grepper tools cycled by order
+let g:grepper = {}
+let g:grepper.tools= ['rg', 'git', 'grep']
+" Search for the current word
+nnoremap <Leader>* :Grepper -cword -noprompt<CR>
+" Search for the current selection
+nmap gs <plug>(GrepperOperator)
+xmap gs <plug>(GrepperOperator)
+" Open Grepper-prompt for a particular grep-alike tool
+nnoremap <Leader>g :Grepper -tool git<CR>
+nnoremap <Leader>G :Grepper -tool rg<CR>
+" -----------
 " EditorConfig
 " ------------
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
