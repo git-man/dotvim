@@ -56,8 +56,11 @@ call minpac#add('ctrlpvim/ctrlp.vim')
 " ----------------------------------------------------------------------------
 " View related settings
 " ----------------------------------------------------------------------------
-" Set default colorscheme
-colorscheme gruvbox
+" Set default colorscheme by order, last takes precedence, silent ign errors
+silent! colorscheme koehler
+silent! colorscheme gruvbox
+" Set dark background
+set background=dark
 " True colors for terminal available, if vim >=8.0 or Neovim >= 0.1.5
 "if (has('vcon'))
 if (has('termguicolors'))
