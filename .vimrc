@@ -14,7 +14,7 @@ set vb t_vb=
 " Disable beeps
 set noerrorbells
 
-" Change leader key
+" Change leader key, '\' by default
 "let mapleader = ','
 " ----------------------------------------------------------------------------
 
@@ -38,6 +38,7 @@ call minpac#add('tpope/vim-unimpaired')
 " Syntax highlighting
 call minpac#add('morhetz/gruvbox')
 call minpac#add('PProvost/vim-ps1')
+call minpac#add('pboettch/vim-cmake-syntax')
 " Formatting
 call minpac#add('godlygeek/tabular')
 " Version control
@@ -50,7 +51,6 @@ call minpac#add('vhdirk/vim-cmake')
 " https://github.com/ctrlpvim/ctrlp.vim
 " https://www.mattlayman.com/blog/2019/supercharging-vim-navigate-files-instantly/
 call minpac#add('ctrlpvim/ctrlp.vim')
-call minpac#add('mhinz/vim-grepper')
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
@@ -144,6 +144,19 @@ set ignorecase
 set smartcase
 " Automatically search for the next item
 set incsearch
+
+" Search for selected text, forwards or backwards.
+" See: https://vim.fandom.com/wiki/Search_for_visually_selected_text
+vnoremap <silent> * :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gVzv:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <silent> # :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy?<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
+  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gVzv:call setreg('"', old_reg, old_regtype)<CR>
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
@@ -220,8 +233,10 @@ if has("autocmd")
   autocmd FileType netrw setl bufhidden=wipe
   autocmd FileType cpp setl ts=4 sts=4 sw=4 noexpandtab tw=0 cindent
     \ cino=j1,(0
-  autocmd FileType yaml,markdown setl ts=2 sts=2 sw=2 expandtab tw=0
-    \ autoindent smartindent
+  autocmd FileType yaml setl ts=2 sts=2 sw=2 expandtab tw=0 autoindent
+    \ smartindent
+  autocmd FileType markdown setl ts=2 sts=2 sw=2 expandtab tw=80 autoindent
+    \ smartindent
   autocmd BufNewFile,BufRead *.rts,*.rrr setlocal ft=cpp
 else
   " set autoindenting on, indents like the previous line
@@ -240,6 +255,30 @@ let g:netrw_altv=1          " open splits to the right
 let g:netrw_liststyle=3     " tree view
 "let g:netrw_list_hide=netrw_gitignore#Hide()
 "let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
+" ----------------------------------------------------------------------------
+
+" ----------------------------------------------------------------------------
+" Grep settings
+" ----------------------------------------------------------------------------
+" Setup improved Grepper, will be overwritten by fastest (ordering), see:
+" https://gist.github.com/igemnace/bf617fa7f84b379feedb39dcf27c0719
+" https://www.reddit.com/r/vim/comments/7bj837/favorite_console_tools_to_use_with_vim/dpiixjc/
+if executable('ag')
+  set grepprg=ag\ --vimgrep\ $*
+  set grepformat=%f:%l:%c:%m
+endif
+if executable('rg')
+  set grepprg=rg\ --vimgrep
+  set grepformat=%f:%l:%c:%m
+endif
+" Provide an async :Grep alternative to :grep
+command! -bang -nargs=+ Grep AsyncRun -program=grep @ <args> %:p:h
+" Add useful mappings
+nnoremap <Leader>* :Grep <cword><CR>
+" Search selection in visual mode
+" See:
+" https://stackoverflow.com/questions/40867576/how-to-use-vimgrep-to-grep-work-thats-high-lighted-by-vim
+vnoremap // y:execute 'Grep "' . escape(@@, '/\') . '"'<CR>
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
@@ -300,24 +339,14 @@ nnoremap <Leader>b :CtrlPBuffer<CR>
 " Ignore version control related meta data
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 " -----
-" vim-grepper
-" -----------
-" Define grepper tools cycled by order
-let g:grepper = {}
-let g:grepper.tools= ['rg', 'git', 'grep']
-" Search for the current word
-nnoremap <Leader>* :Grepper -cword -noprompt<CR>
-" Search for the current selection
-nmap gs <plug>(GrepperOperator)
-xmap gs <plug>(GrepperOperator)
-" Open Grepper-prompt for a particular grep-alike tool
-nnoremap <Leader>g :Grepper -tool git<CR>
-nnoremap <Leader>G :Grepper -tool rg<CR>
-" -----------
 " EditorConfig
 " ------------
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 " ------------
+" vim-fugitive
+" ------------
+" Get cooperate with vim-fugitive
+command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
@@ -331,7 +360,9 @@ function! MyStatusLine()
     " Buffer flags
     let statusline .= "%( %h%1*%m%*%r%w%) "
     " File format and type
-    let statusline .= "(%{&ff}%(\/%Y%))"
+    let statusline .= "(%{&ff}%(\/%Y%)) "
+    " Name of the current branch (needs fugitive.vim)
+    let statusline .= "%{fugitive#statusline()}"
     " Left/right separator
     let statusline .= "%="
     " Line & column
