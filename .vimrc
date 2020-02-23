@@ -21,6 +21,8 @@ set noerrorbells
 " Add package manager
 " Since version 8 package management has been enabled officially
 " ----------------------------------------------------------------------------
+"  Add the following path to recognize minpac on win via git bash
+exe 'set packpath+=' . expand('~/vimfiles')
 packadd minpac
 call minpac#init()
 call minpac#add('k-takata/minpac', {'type': 'opt'})
