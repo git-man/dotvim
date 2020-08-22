@@ -278,12 +278,19 @@ if executable('rg')
 endif
 " Provide an async :Grep alternative to :grep
 command! -bang -nargs=+ Grep AsyncRun -program=grep @ <args> %:p:h
+" Without automatic path -> user has to manually provide the path
+command! -bang -nargs=+ Grepp AsyncRun -program=grep @ <args>
+" With path set to CWD for grepping files type of log
+" NOTE: The path separator '/' is used here, because it works on win as well
+command! -bang -nargs=+ GrepCwdLog execute 'Grepp -i --no-ignore --type log -e fehlgeschlagen:' escape(getcwd(), ' ') . '/<args>'
 " Add useful mappings
 nnoremap <Leader>* :Grep <cword><CR>
 " Search selection in visual mode
 " See:
 " https://stackoverflow.com/questions/40867576/how-to-use-vimgrep-to-grep-work-thats-high-lighted-by-vim
 vnoremap // y:execute 'Grep "' . escape(@@, '/\') . '"'<CR>
+
+" execute 'Grepp -i --no-ignore --multiline --multiline-dotall --type-add rts:*.rts -e T_sObcuStatus::STS_UNDEFINED\s*,\s*[/]*\s*\w+\s*.\s*T_sObcuStatus::SA_NOT_ASSURE,' escape(getcwd(), ' ') . '\modules\tgmt_wcu_sep\TESTS\rttester'
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
@@ -292,7 +299,7 @@ vnoremap // y:execute 'Grep "' . escape(@@, '/\') . '"'<CR>
 " Create the tags file (ctags needed to be installed on system as precondition)
 "command! MakeTags !ctags -R .
 if executable('ctags')
-  command! MakeTags !start /min ctags -R .
+  command! MakeTags !start /min ctags -R --exclude=.git --exclude=./build* --c-kinds=+p .
 endif
 
 " Cscope ---
