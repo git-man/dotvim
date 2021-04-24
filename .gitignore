@@ -2,3 +2,5 @@
 pack/**/*
 # ignore 'spell' dir
 spell/**/*
+# ignore netrwhist
+.netrwhist

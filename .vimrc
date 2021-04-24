@@ -41,6 +41,7 @@ call minpac#add('tpope/vim-unimpaired')
 call minpac#add('morhetz/gruvbox')
 call minpac#add('PProvost/vim-ps1')
 call minpac#add('pboettch/vim-cmake-syntax')
+call minpac#add('Raku/vim-raku')
 " Formatting
 call minpac#add('godlygeek/tabular')
 " Version control
@@ -53,6 +54,8 @@ call minpac#add('vhdirk/vim-cmake')
 " https://github.com/ctrlpvim/ctrlp.vim
 " https://www.mattlayman.com/blog/2019/supercharging-vim-navigate-files-instantly/
 call minpac#add('ctrlpvim/ctrlp.vim')
+" Navigation
+call minpac#add('chrisbra/matchit')
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
@@ -242,6 +245,10 @@ if has("autocmd")
     \ smartindent
   autocmd FileType markdown setl ts=2 sts=2 sw=2 expandtab tw=80 autoindent
     \ smartindent
+  autocmd FileType raku setl ts=4 sts=4 sw=4 noexpandtab tw=0 autoindent
+    \ smartindent
+  autocmd FileType perl setl ts=4 sts=4 sw=4 noexpandtab tw=0 autoindent
+    \ smartindent
   autocmd BufNewFile,BufRead *.rts,*.rrr setlocal ft=cpp
 else
   " set autoindenting on, indents like the previous line
@@ -291,6 +298,9 @@ nnoremap <Leader>* :Grep <cword><CR>
 vnoremap // y:execute 'Grep "' . escape(@@, '/\') . '"'<CR>
 
 " execute 'Grepp -i --no-ignore --multiline --multiline-dotall --type-add rts:*.rts -e T_sObcuStatus::STS_UNDEFINED\s*,\s*[/]*\s*\w+\s*.\s*T_sObcuStatus::SA_NOT_ASSURE,' escape(getcwd(), ' ') . '\modules\tgmt_wcu_sep\TESTS\rttester'
+"
+" Grep -i --type-add rts:*.rts -e iCmd\s*=\s*0x00
+" Grepp -g *.deco -i -e src:34400:\sdst:8201 .
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
