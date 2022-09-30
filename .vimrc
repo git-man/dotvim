@@ -46,16 +46,18 @@ call minpac#add('Raku/vim-raku')
 call minpac#add('godlygeek/tabular')
 " Version control
 call minpac#add('tpope/vim-fugitive')
-" Common editor config to follow coding guidelines
-call minpac#add('editorconfig/editorconfig-vim')
 " CMake related
 call minpac#add('vhdirk/vim-cmake')
 " File finding and searching, see:
-" https://github.com/ctrlpvim/ctrlp.vim
 " https://www.mattlayman.com/blog/2019/supercharging-vim-navigate-files-instantly/
-call minpac#add('ctrlpvim/ctrlp.vim')
+"call minpac#add('ctrlpvim/ctrlp.vim')
+call minpac#add('junegunn/fzf')
+call minpac#add('junegunn/fzf.vim')
 " Navigation
 call minpac#add('chrisbra/matchit')
+" Respecting project conventions via .editorconfig file, see:
+" https://editorconfig.org/
+call minpac#add('editorconfig/editorconfig-vim')
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
@@ -76,7 +78,7 @@ endif
 "  \ guifg=DarkGrey guibg=NONE
 " Color used for the ColorColumn
 "highlight ColorColumn guibg=#121212
-highlight ColorColumn guibg=#9C0C20
+highlight ColorColumn guibg=#533028
 
 " Improve performance in XML-Files with large lines by constraining the
 " Syntax Highlighting
@@ -239,16 +241,19 @@ if has("autocmd")
   " Workaround those 'orphaned' netrw buffers
   " See: https://github.com/tpope/vim-vinegar/issues/13
   autocmd FileType netrw setl bufhidden=wipe
-  autocmd FileType cpp setl ts=4 sts=4 sw=4 noexpandtab tw=0 cindent
-    \ cino=j1,(0
   autocmd FileType yaml setl ts=2 sts=2 sw=2 expandtab tw=0 autoindent
     \ smartindent
   autocmd FileType markdown setl ts=2 sts=2 sw=2 expandtab tw=80 autoindent
     \ smartindent
-  autocmd FileType raku setl ts=4 sts=4 sw=4 noexpandtab tw=0 autoindent
+  autocmd FileType raku setl ts=4 sts=4 sw=4 expandtab tw=0 autoindent
     \ smartindent
-  autocmd FileType perl setl ts=4 sts=4 sw=4 noexpandtab tw=0 autoindent
+  autocmd FileType perl setl ts=4 sts=4 sw=4 expandtab tw=0 autoindent
     \ smartindent
+  autocmd FileType ps1 setl ts=4 sts=4 sw=4 expandtab tw=0
+    \ cindent cinoptions& cinoptions+=+0 cinkeys-=0#
+  " See here: https://winterdom.com/2008/03/18/editingpowershellscriptswithvim
+  autocmd FileType cpp setl ts=4 sts=4 sw=4 noexpandtab tw=0 cindent
+    \ cino=j1,(0
   autocmd BufNewFile,BufRead *.rts,*.rrr setlocal ft=cpp
 else
   " set autoindenting on, indents like the previous line
@@ -299,7 +304,7 @@ vnoremap // y:execute 'Grep "' . escape(@@, '/\') . '"'<CR>
 
 " execute 'Grepp -i --no-ignore --multiline --multiline-dotall --type-add rts:*.rts -e T_sObcuStatus::STS_UNDEFINED\s*,\s*[/]*\s*\w+\s*.\s*T_sObcuStatus::SA_NOT_ASSURE,' escape(getcwd(), ' ') . '\modules\tgmt_wcu_sep\TESTS\rttester'
 "
-" Grep -i --type-add rts:*.rts -e iCmd\s*=\s*0x00
+" Grep -i --type-add rts:*.rts -trts -e iCmd\s*=\s*0x00
 " Grepp -g *.deco -i -e src:34400:\sdst:8201 .
 " ----------------------------------------------------------------------------
 
@@ -351,24 +356,78 @@ endif
 " ----------------------------------------------------------------------------
 " Plugin related settings
 " ----------------------------------------------------------------------------
-" CtrlP
-" -----
-if executable('rg')
-  let g:ctrlp_user_command = 'rg %s --files --hidden --color=never --glob ""'
-endif
-" Mapping to find buffer by CtrlP
-nnoremap <Leader>b :CtrlPBuffer<CR>
-" Ignore version control related meta data
-let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-" -----
+"" CtrlP
+"" -----
+"if executable('rg')
+"  let g:ctrlp_user_command = 'rg %s --files --hidden --color=never --glob ""'
+"endif
+"" Mapping to find buffer by CtrlP
+"nnoremap <Leader>b :CtrlPBuffer<CR>
+"" Ignore version control related meta data
+"let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+
+" ---
+" fzf
+" ---
+" - down / up / left / right
+let g:fzf_layout = { 'down': '40%' }
+
+nmap <C-P> :GFiles<CR>
+nmap <Leader>f :GFiles<CR>
+nmap <Leader>F :Files<CR>
+
+nmap <Leader>b :Buffers<CR>
+nmap <Leader>h :History<CR>
+
+nmap <Leader>t :BTags<CR>
+nmap <Leader>T :Tags<CR>
+
+"nmap <Leader>l :BLines<CR>
+"nmap <Leader>L :Lines<CR>
+"nmap <Leader>' :Marks<CR>
+
+nmap <Leader>/ :Rg<Space>
+
+nmap <Leader>H :Helptags!<CR>
+
+nmap <Leader>C :Commands<CR>
+
+nmap <Leader>: :History:<CR>
+
+nmap <Leader>M :Maps<CR>
+
+nmap <Leader>s :Filetypes<CR>
+
+" Taken from official help of FZF
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+
+" ------------
 " EditorConfig
 " ------------
-let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+
 " ------------
 " vim-fugitive
 " ------------
-" Get cooperate with vim-fugitive
+" Get AsyncRun cooperate with vim-fugitive
 command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
+
+" After fugitive commit: 17db9ca, we are required to provide your own
+" asynchronous Gpush and Gfetch
+" -> AsyncRun
+command! -bang -bar -nargs=* Gpush execute 'AsyncRun<bang> -cwd=' .
+          \ fnameescape(FugitiveGitDir()) 'git push' <q-args>
+command! -bang -bar -nargs=* Gfetch execute 'AsyncRun<bang> -cwd=' .
+          \ fnameescape(FugitiveGitDir()) 'git fetch' <q-args>
+command! -bang -bar -nargs=* Gpull execute 'AsyncRun<bang> -cwd=' .
+          \ fnameescape(FugitiveGitDir()) 'git pull' <q-args>
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
@@ -399,4 +458,33 @@ function! MyStatusLine()
 endfunction
 " ---
 
+" ----------------------------------------------------------------------------
+
+" ----------------------------------------------------------------------------
+" Temporary fixes (e. g. to workaround missing Vim patches)
+" ----------------------------------------------------------------------------
+
+" Opening URLs via gx ---
+
+" Doesn't work because of gh#vim/vim#4738
+" let g:netrw_browsex_viewer='setsid osurl'
+let g:netrw_nogx=1
+
+" This is just temporary workaround until the above issue is truly
+" resolved.
+" https://github.com/vim/vim/issues/4738#issuecomment-830820565
+" https://bugzilla.suse.com/show_bug.cgi?id=1173583
+" (https://bugzilla.suse.com/show_bug.cgi?id=1173583)
+" gh#vim/vim#4738
+function! OpenURLUnderCursor()
+  let s:uri = expand('<cfile>')
+  echom "s:uri = " . s:uri
+  if s:uri != ''
+    echo s:uri
+    silent exec "!start ".s:uri
+    :redraw!
+  endif
+endfunction
+nnoremap gx :call OpenURLUnderCursor()<CR>
+" ---
 " ----------------------------------------------------------------------------
