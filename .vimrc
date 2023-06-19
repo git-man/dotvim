@@ -8,6 +8,10 @@ set nocompatible
 syntax enable
 filetype plugin indent on
 
+" Enable 'modeline' explicitly to utilize file-based overrides
+" e. g. '# vim: sw=2 ts=2 et'
+set modeline
+
 " Disable "ding" sounds
 set vb t_vb=
 
@@ -22,7 +26,7 @@ set noerrorbells
 " Since version 8 package management has been enabled officially
 " ----------------------------------------------------------------------------
 "  Add the following path to recognize minpac on win via git bash
-exe 'set packpath+=' . expand('~/vimfiles')
+exe 'set packpath^=' . expand('~/.vim')
 packadd minpac
 call minpac#init()
 call minpac#add('k-takata/minpac', {'type': 'opt'})
@@ -58,6 +62,10 @@ call minpac#add('chrisbra/matchit')
 " Respecting project conventions via .editorconfig file, see:
 " https://editorconfig.org/
 call minpac#add('editorconfig/editorconfig-vim')
+" Design, e. g. themes, schemes, icons, etc.
+" Always load the vim-devicons as the very last one
+" -> Maybe UTF-8 encoding needs to set explicitly via 'set encoding=UTF-8'
+call minpac#add('ryanoasis/vim-devicons')
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
@@ -85,7 +93,7 @@ highlight ColorColumn guibg=#533028
 set synmaxcol=400
 
 " Sets font tried by order
-set guifont=Inconsolata\ Medium\ 19,Monospace\ 15,Consolas:h13 
+set guifont=Inconsolata\ Medium\ 19,Monospace\ 15,Hack\ Nerd\ Font\ Mono:h12,Consolas:h13 
 
 " Full screen at startup
 if has("gui_win32")	" NT Windows
@@ -436,10 +444,10 @@ command! -bang -bar -nargs=* Gpull execute 'AsyncRun<bang> -cwd=' .
 " Status line ---
 function! MyStatusLine()
     let statusline = ""
+    " Buffer flags
+    let statusline .= "%(%h%1*%m%*%r%w%)"
     " Filename (F -> full, f -> relative)
     let statusline .= "%f"
-    " Buffer flags
-    let statusline .= "%( %h%1*%m%*%r%w%) "
     " File format and type
     let statusline .= "(%{&ff}%(\/%Y%)) "
     " Name of the current branch (needs fugitive.vim)
