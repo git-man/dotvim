@@ -46,6 +46,11 @@ call minpac#add('morhetz/gruvbox')
 call minpac#add('PProvost/vim-ps1')
 call minpac#add('pboettch/vim-cmake-syntax')
 call minpac#add('Raku/vim-raku')
+" Syntax tree related incl. LSP (Language Server Protocol)
+call minpac#add('prabirshrestha/vim-lsp')
+call minpac#add('prabirshrestha/asyncomplete.vim')
+call minpac#add('prabirshrestha/asyncomplete-lsp.vim')
+call minpac#add('mattn/vim-lsp-settings')
 " Formatting
 call minpac#add('godlygeek/tabular')
 " Version control
@@ -444,16 +449,16 @@ command! -bang -bar -nargs=* Gpull execute 'AsyncRun<bang> -cwd=' .
 " Status line ---
 function! MyStatusLine()
     let statusline = ""
-    " Buffer flags
-    let statusline .= "%(%h%1*%m%*%r%w%)"
-    " Filename (F -> full, f -> relative)
-    let statusline .= "%f"
-    " File format and type
-    let statusline .= "(%{&ff}%(\/%Y%)) "
     " Name of the current branch (needs fugitive.vim)
-    let statusline .= "%{fugitive#statusline()}"
+    let statusline .= "%#PmenuSel#%{fugitive#statusline()}%#Pmenu#"
+    " Filename (F -> full, f -> relative)
+    let statusline .= "%f "
     " Left/right separator
     let statusline .= "%="
+    " Buffer flags
+    let statusline .= "%(%h%#Error#%m%*%r%w%)"
+    " File format and type
+    let statusline .= "(%{&enc}\/%{&ff}%(\/%Y%)) "
     " Line & column
     let statusline .= "(%l,%c%V) "
     " Character under cursor (decimal)
