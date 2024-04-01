@@ -20,6 +20,11 @@ set noerrorbells
 
 " Change leader key, '\' by default
 "let mapleader = ','
+
+" Adapt runtimepath
+" Add custom overrides, e. g. for custom compilers (makeprg)
+set runtimepath+=~/.vim/after
+
 " ----------------------------------------------------------------------------
 
 " Add package manager
@@ -53,6 +58,8 @@ call minpac#add('prabirshrestha/asyncomplete-lsp.vim')
 call minpac#add('mattn/vim-lsp-settings')
 " Formatting
 call minpac#add('godlygeek/tabular')
+" Makeprg + Errorformat
+call minpac#add('tpope/vim-dispatch')
 " Version control
 call minpac#add('tpope/vim-fugitive')
 " CMake related
