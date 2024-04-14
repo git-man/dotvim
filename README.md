@@ -37,8 +37,8 @@ git clone https://github.com/k-takata/minpac.git
 
 Unix based:
 ```
-ln -s ~/.vim/vimrc ~/.vimrc
-(Optional) ln -s ~/.vim/gvimrc ~/.gvimrc
+ln -s ~/.vim/.vimrc ~/.vimrc
+(Optional) ln -s ~/.vim/.gvimrc ~/.gvimrc
 ```
 Windows based:
 ```
