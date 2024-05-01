@@ -174,6 +174,10 @@ set ignorecase
 set smartcase
 " Automatically search for the next item
 set incsearch
+" When set case is ignored when completing file names and directories.
+" Has no effect when 'fileignorecase' is set.
+" Has no effect on e. g. Windows.
+set wildignorecase
 
 " Search for selected text, forwards or backwards.
 " See: https://vim.fandom.com/wiki/Search_for_visually_selected_text
@@ -272,6 +276,7 @@ if has("autocmd")
   autocmd FileType ps1 setl ts=4 sts=4 sw=4 expandtab tw=0
     \ cindent cinoptions& cinoptions+=+0 cinkeys-=0#
   " See here: https://winterdom.com/2008/03/18/editingpowershellscriptswithvim
+  autocmd FileType cmake setl ts=2 sts=2 sw=2 expandtab tw=0 cindent
   autocmd FileType cpp setl ts=4 sts=4 sw=4 noexpandtab tw=0 cindent
     \ cino=j1,(0
   autocmd BufNewFile,BufRead *.rts,*.rrr setlocal ft=cpp
@@ -371,6 +376,20 @@ endif
 " https://code.google.com/archive/p/cscope-win32/
 " https://github.com/srtlg/cscope-win32
 " ---
+" ----------------------------------------------------------------------------
+
+" ----------------------------------------------------------------------------
+" Debug settings
+" ----------------------------------------------------------------------------
+" Termdebug
+" ---------
+" Source the termdebug plugin
+packadd termdebug
+" Add mapping to load termdebug
+nmap <silent> <leader>td :Termdebug<cr>
+" Add mappings for :Step and :Over
+nmap <silent> <leader>s :Step<cr>
+nmap <silent> <leader>o :Over<cr>
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
