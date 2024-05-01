@@ -177,7 +177,8 @@ set incsearch
 " When set case is ignored when completing file names and directories.
 " Has no effect when 'fileignorecase' is set.
 " Has no effect on e. g. Windows.
-set wildignorecase
+"set wildignorecase
+set fileignorecase
 
 " Search for selected text, forwards or backwards.
 " See: https://vim.fandom.com/wiki/Search_for_visually_selected_text
@@ -385,6 +386,8 @@ endif
 " ---------
 " Source the termdebug plugin
 packadd termdebug
+" Use vertical split view by default
+let g:termdebug_wide=1
 " Add mapping to load termdebug
 nmap <silent> <leader>td :Termdebug<cr>
 " Add mappings for :Step and :Over
