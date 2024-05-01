@@ -63,7 +63,7 @@ call minpac#add('tpope/vim-dispatch')
 " Version control
 call minpac#add('tpope/vim-fugitive')
 " CMake related
-call minpac#add('vhdirk/vim-cmake')
+"call minpac#add('vhdirk/vim-cmake')
 " File finding and searching, see:
 " https://www.mattlayman.com/blog/2019/supercharging-vim-navigate-files-instantly/
 "call minpac#add('ctrlpvim/ctrlp.vim')
@@ -309,9 +309,9 @@ if executable('rg')
   set grepformat=%f:%l:%c:%m
 endif
 " Provide an async :Grep alternative to :grep
-command! -bang -nargs=+ Grep AsyncRun -program=grep @ <args> %:p:h
+command! -bang -nargs=+ -complete=file_in_path Grep AsyncRun -program=grep @ <args> %:p:h
 " Without automatic path -> user has to manually provide the path
-command! -bang -nargs=+ Grepp AsyncRun -program=grep @ <args>
+command! -bang -nargs=+ -complete=file_in_path Grepp AsyncRun -program=grep @ <args>
 " With path set to CWD for grepping files type of log
 " NOTE: The path separator '/' is used here, because it works on win as well
 command! -bang -nargs=+ GrepCwdLog execute 'Grepp -i --no-ignore --type log -e fehlgeschlagen:' escape(getcwd(), ' ') . '/<args>'
@@ -389,44 +389,49 @@ endif
 " ---
 " fzf
 " ---
-" - down / up / left / right
-let g:fzf_layout = { 'down': '40%' }
+if executable('fzf')
+  " - down / up / left / right
+  let g:fzf_layout = { 'down': '40%' }
 
-nmap <C-P> :GFiles<CR>
-nmap <Leader>f :GFiles<CR>
-nmap <Leader>F :Files<CR>
+  nmap <C-P> :GFiles<CR>
+  nmap <Leader>f :GFiles<CR>
+  nmap <Leader>F :Files<CR>
 
-nmap <Leader>b :Buffers<CR>
-nmap <Leader>h :History<CR>
+  nmap <Leader>b :Buffers<CR>
+  nmap <Leader>h :History<CR>
 
-nmap <Leader>t :BTags<CR>
-nmap <Leader>T :Tags<CR>
+  nmap <Leader>t :BTags<CR>
+  nmap <Leader>T :Tags<CR>
 
-"nmap <Leader>l :BLines<CR>
-"nmap <Leader>L :Lines<CR>
-"nmap <Leader>' :Marks<CR>
+  "nmap <Leader>l :BLines<CR>
+  "nmap <Leader>L :Lines<CR>
+  "nmap <Leader>' :Marks<CR>
 
-nmap <Leader>/ :Rg<Space>
+  if executable('rg')
+    nmap <Leader>/ :Rg<Space>
+  endif
 
-nmap <Leader>H :Helptags!<CR>
+  nmap <Leader>H :Helptags!<CR>
 
-nmap <Leader>C :Commands<CR>
+  nmap <Leader>C :Commands<CR>
 
-nmap <Leader>: :History:<CR>
+  nmap <Leader>: :History:<CR>
 
-nmap <Leader>M :Maps<CR>
+  nmap <Leader>M :Maps<CR>
 
-nmap <Leader>s :Filetypes<CR>
+  nmap <Leader>s :Filetypes<CR>
 
-" Taken from official help of FZF
-function! RipgrepFzf(query, fullscreen)
-  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
-  let initial_command = printf(command_fmt, shellescape(a:query))
-  let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
-  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
-endfunction
-command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+  "" Taken from official help of FZF
+  "function! RipgrepFzf(query, fullscreen)
+  "  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+  "  let initial_command = printf(command_fmt, shellescape(a:query))
+  "  let reload_command = printf(command_fmt, '{q}')
+  "  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  "  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+  "endfunction
+  "command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+
+endif
 
 " ------------
 " EditorConfig
