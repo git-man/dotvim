@@ -201,8 +201,8 @@ vnoremap <silent> # :<C-U>
 set writebackup	
 " Disables creation of swapfiles
 set noswapfile		
-" Keep 500 lines of command line history
-set history=500	
+" Keep 1000 lines of command line history
+set history=1000
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
@@ -411,7 +411,7 @@ nmap <silent> <leader>o :Over<cr>
 " ---
 " fzf
 " ---
-if executable('fzf')
+if executable('fzf') && exists(":silent! FZF")
   " - down / up / left / right
   let g:fzf_layout = { 'down': '40%' }
 
@@ -458,7 +458,9 @@ endif
 " ------------
 " EditorConfig
 " ------------
-let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+if exists(":silent! EditorConfigEnable")
+  let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+endif
 
 " ------------
 " vim-fugitive
@@ -475,6 +477,25 @@ command! -bang -bar -nargs=* Gfetch execute 'AsyncRun<bang> -cwd=' .
           \ fnameescape(FugitiveGitDir()) 'git fetch' <q-args>
 command! -bang -bar -nargs=* Gpull execute 'AsyncRun<bang> -cwd=' .
           \ fnameescape(FugitiveGitDir()) 'git pull' <q-args>
+
+" ------------
+" vim-dispatch
+" ------------
+" some CMake convenience functions
+"function! CMakeConfigure()
+"    Dispatch mkdir -p build
+"    Dispatch cmake --configure -B build -S .
+"    Dispatch ln -s build/compile_commands.json ./compile_commands.json
+"endfunction
+"nnoremap <F7> :call CMakeConfigure()<CR>
+"
+"function! CMakeClean()
+"    Dispatch cmake --build build --target clean
+"endfunction
+"nnoremap <F6> :call CMakeClean()<CR>
+"
+"nnoremap <F5> :Make<CR>
+
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
