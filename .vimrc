@@ -411,7 +411,7 @@ nmap <silent> <leader>o :Over<cr>
 " ---
 " fzf
 " ---
-if executable('fzf') && exists(":silent! FZF")
+if executable('fzf') && exists(":FZF")
   " - down / up / left / right
   let g:fzf_layout = { 'down': '40%' }
 
@@ -458,7 +458,7 @@ endif
 " ------------
 " EditorConfig
 " ------------
-if exists(":silent! EditorConfigEnable")
+if exists(":EditorConfigEnable")
   let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 endif
 
@@ -466,7 +466,6 @@ endif
 " vim-fugitive
 " ------------
 " Get AsyncRun cooperate with vim-fugitive
-command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
 
 " After fugitive commit: 17db9ca, we are required to provide your own
 " asynchronous Gpush and Gfetch
