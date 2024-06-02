@@ -411,7 +411,7 @@ nmap <silent> <leader>o :Over<cr>
 " ---
 " fzf
 " ---
-if executable('fzf') && exists(":FZF")
+if executable('fzf') && exists(':FZF')
   " - down / up / left / right
   let g:fzf_layout = { 'down': '40%' }
 
@@ -454,6 +454,57 @@ if executable('fzf') && exists(":FZF")
   "command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 
 endif
+
+
+function! CMakeConfigurePreset(preset_name, build_path = "build/my_cmake")
+  let l:cmd = 'cmake --preset='
+
+  let l:build_path = getcwd() . '/' . a:build_path
+  if isdirectory(l:build_path)
+    call delete(expand(l:build_path), "rf")
+    call delete(expand(getcwd() . '/' . "compile_commands.json"))
+  endif
+  call mkdir(l:build_path, "p", 0700)
+
+  execute 'Dispatch ' . l:cmd . a:preset_name . ' -B' . l:build_path
+
+  " handle compile_commands.json file to obtain an up-to-date  symlink in the CWD
+  if has('win32') || has('win64')
+    call system('del compile_commands.json')
+    call system('cmd /c mklink compile_commands.json ' . l:build_path . "/compile_commands.json")
+  else
+    call system('rm compile_commands.json')
+    call system('ln -s ' . l:build_path . '/compile_commands.json compile_commands.json')
+  endif
+endfunction
+
+command! -nargs=+ -complete=shellcmd -complete=file_in_path CMakeConfigurePreset call CMakeConfigurePreset(<f-args>)
+nnoremap <leader>cc :CMakeConfigurePreset<space>
+
+function! CMakeBuildDir(clean_before = 0, build_path = "build/my_cmake")
+  let l:cmd       = 'cmake --build ' . getcwd() . '/' . a:build_path
+  if a:clean_before
+    execute 'Dispatch ' . l:cmd . ' --target clean'
+  endif
+  execute 'Dispatch ' . l:cmd
+endfunction
+
+command! -nargs=* -complete=file_in_path CMakeBuildDir call CMakeBuildDir(<f-args>)
+command! -nargs=* -complete=file_in_path CMakeBuildCleanDir call CMakeBuildDir(1, <f-args>)
+nnoremap <leader>cb :CMakeBuildDir<space>
+nnoremap <leader>ccb :CMakeBuildCleanDir<space>
+
+" -------------------------------------
+" Undo persist between editing sessions
+" -------------------------------------
+set undofile
+if !has('nvim')
+  set undodir=~/.vim/undo
+endif
+augroup vimrc
+  autocmd!
+  autocmd BufWritePre /tmp/* /temp/* setlocal noundofile
+augroup END
 
 " ------------
 " EditorConfig

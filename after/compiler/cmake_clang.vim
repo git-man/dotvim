@@ -1,5 +1,5 @@
-let current_compiler = "clang"
-CompilerSet makeprg=cmake\ --build\ --preset\ $*
+let current_compiler = "cmake_clang"
+CompilerSet makeprg=cmake\ --build\ $*
 "CompilerSet errorformat=%f%l%c:\ %t%s:\ %m
 CompilerSet errorformat=
   \%A%f:%l:%c:\ %#%t%[a-z]%\\+:\ %#%m,
