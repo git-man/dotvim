@@ -266,6 +266,8 @@ if has("autocmd")
   " Workaround those 'orphaned' netrw buffers
   " See: https://github.com/tpope/vim-vinegar/issues/13
   autocmd FileType netrw setl bufhidden=wipe
+  autocmd FileType json setl ts=2 sts=2 sw=2 expandtab tw=0 autoindent
+    \ smartindent
   autocmd FileType yaml setl ts=2 sts=2 sw=2 expandtab tw=0 autoindent
     \ smartindent
   autocmd FileType markdown setl ts=2 sts=2 sw=2 expandtab tw=80 autoindent
