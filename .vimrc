@@ -280,6 +280,7 @@ if has("autocmd")
     \ cindent cinoptions& cinoptions+=+0 cinkeys-=0#
   " See here: https://winterdom.com/2008/03/18/editingpowershellscriptswithvim
   autocmd FileType cmake setl ts=2 sts=2 sw=2 expandtab tw=0 cindent
+  autocmd FileType CMakeLists.txt setl ts=2 sts=2 sw=2 expandtab tw=0 cindent
   autocmd FileType cpp setl ts=4 sts=4 sw=4 noexpandtab tw=0 cindent
     \ cino=j1,(0
   autocmd BufNewFile,BufRead *.rts,*.rrr setlocal ft=cpp
