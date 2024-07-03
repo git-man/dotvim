@@ -177,7 +177,8 @@ set incsearch
 " When set case is ignored when completing file names and directories.
 " Has no effect when 'fileignorecase' is set.
 " Has no effect on e. g. Windows.
-set wildignorecase
+"set wildignorecase
+set fileignorecase
 
 " Search for selected text, forwards or backwards.
 " See: https://vim.fandom.com/wiki/Search_for_visually_selected_text
@@ -200,8 +201,8 @@ vnoremap <silent> # :<C-U>
 set writebackup	
 " Disables creation of swapfiles
 set noswapfile		
-" Keep 500 lines of command line history
-set history=500	
+" Keep 1000 lines of command line history
+set history=1000
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
@@ -265,6 +266,8 @@ if has("autocmd")
   " Workaround those 'orphaned' netrw buffers
   " See: https://github.com/tpope/vim-vinegar/issues/13
   autocmd FileType netrw setl bufhidden=wipe
+  autocmd FileType json setl ts=2 sts=2 sw=2 expandtab tw=0 autoindent
+    \ smartindent
   autocmd FileType yaml setl ts=2 sts=2 sw=2 expandtab tw=0 autoindent
     \ smartindent
   autocmd FileType markdown setl ts=2 sts=2 sw=2 expandtab tw=80 autoindent
@@ -387,6 +390,8 @@ endif
 "if !exists("g:termdebug_loaded")
 packadd! termdebug
 "endif
+" Use vertical split view by default
+let g:termdebug_wide=1
 " Add mapping to load termdebug
 nmap <silent> <leader>td :Termdebug<cr>
 " Add mappings for :Step and :Over
@@ -410,7 +415,7 @@ nmap <silent> <leader>o :Over<cr>
 " ---
 " fzf
 " ---
-if executable('fzf')
+if executable('fzf') && exists(':FZF')
   " - down / up / left / right
   let g:fzf_layout = { 'down': '40%' }
 
@@ -454,16 +459,68 @@ if executable('fzf')
 
 endif
 
+
+function! CMakeConfigurePreset(preset_name, build_path = "build/my_cmake")
+  let l:cmd = 'cmake --preset='
+
+  let l:build_path = getcwd() . '/' . a:build_path
+  if isdirectory(l:build_path)
+    call delete(expand(l:build_path), "rf")
+    call delete(expand(getcwd() . '/' . "compile_commands.json"))
+  endif
+  call mkdir(l:build_path, "p", 0700)
+
+  execute 'Dispatch ' . l:cmd . a:preset_name . ' -B' . l:build_path
+
+  " handle compile_commands.json file to obtain an up-to-date  symlink in the CWD
+  if has('win32') || has('win64')
+    call system('del compile_commands.json')
+    call system('cmd /c mklink compile_commands.json ' . l:build_path . "/compile_commands.json")
+  else
+    call system('rm compile_commands.json')
+    call system('ln -s ' . l:build_path . '/compile_commands.json compile_commands.json')
+  endif
+endfunction
+
+command! -nargs=+ -complete=shellcmd -complete=file_in_path CMakeConfigurePreset call CMakeConfigurePreset(<f-args>)
+nnoremap <leader>cc :CMakeConfigurePreset<space>
+
+function! CMakeBuildDir(clean_before = 0, build_path = "build/my_cmake")
+  let l:cmd       = 'cmake --build ' . getcwd() . '/' . a:build_path
+  if a:clean_before
+    execute 'Dispatch ' . l:cmd . ' --target clean'
+  endif
+  execute 'Dispatch ' . l:cmd
+endfunction
+
+command! -nargs=* -complete=file_in_path CMakeBuildDir call CMakeBuildDir(<f-args>)
+command! -nargs=* -complete=file_in_path CMakeBuildCleanDir call CMakeBuildDir(1, <f-args>)
+nnoremap <leader>cb :CMakeBuildDir<space>
+nnoremap <leader>ccb :CMakeBuildCleanDir<space>
+
+" -------------------------------------
+" Undo persist between editing sessions
+" -------------------------------------
+set undofile
+if !has('nvim')
+  set undodir=~/.vim/undo
+endif
+augroup vimrc
+  autocmd!
+  autocmd BufWritePre /tmp/* /temp/* setlocal noundofile
+augroup END
+
 " ------------
 " EditorConfig
 " ------------
-let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+if exists(":EditorConfigEnable")
+  let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+endif
 
 " ------------
 " vim-fugitive
 " ------------
 " Get AsyncRun cooperate with vim-fugitive
-command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
 
 " After fugitive commit: 17db9ca, we are required to provide your own
 " asynchronous Gpush and Gfetch
@@ -474,6 +531,25 @@ command! -bang -bar -nargs=* Gfetch execute 'AsyncRun<bang> -cwd=' .
           \ fnameescape(FugitiveGitDir()) 'git fetch' <q-args>
 command! -bang -bar -nargs=* Gpull execute 'AsyncRun<bang> -cwd=' .
           \ fnameescape(FugitiveGitDir()) 'git pull' <q-args>
+
+" ------------
+" vim-dispatch
+" ------------
+" some CMake convenience functions
+"function! CMakeConfigure()
+"    Dispatch mkdir -p build
+"    Dispatch cmake --configure -B build -S .
+"    Dispatch ln -s build/compile_commands.json ./compile_commands.json
+"endfunction
+"nnoremap <F7> :call CMakeConfigure()<CR>
+"
+"function! CMakeClean()
+"    Dispatch cmake --build build --target clean
+"endfunction
+"nnoremap <F6> :call CMakeClean()<CR>
+"
+"nnoremap <F5> :Make<CR>
+
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
