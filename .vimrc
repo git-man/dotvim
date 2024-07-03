@@ -384,7 +384,9 @@ endif
 " Termdebug
 " ---------
 " Source the termdebug plugin
-packadd termdebug
+"if !exists("g:termdebug_loaded")
+packadd! termdebug
+"endif
 " Add mapping to load termdebug
 nmap <silent> <leader>td :Termdebug<cr>
 " Add mappings for :Step and :Over
