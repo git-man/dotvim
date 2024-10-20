@@ -78,6 +78,8 @@ call minpac#add('editorconfig/editorconfig-vim')
 " Always load the vim-devicons as the very last one
 " -> Maybe UTF-8 encoding needs to set explicitly via 'set encoding=UTF-8'
 call minpac#add('ryanoasis/vim-devicons')
+" Copilot
+call minpac#add('github/copilot.vim')
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
