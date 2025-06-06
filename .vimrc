@@ -93,7 +93,7 @@ set background=dark
 " True colors for terminal available, if vim >=8.0 or Neovim >= 0.1.5
 "if (has('vcon'))
 if (has('termguicolors'))
-  set termguicolors
+  set notermguicolors
 endif
 " Color used for the line numbers
 "highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE
@@ -257,6 +257,9 @@ nnoremap <silent> <Space> :silent noh<Bar>echo<CR>
 
 " Show invisible characters
 nmap <leader>l :set list!<CR>
+
+" Copy to Windows clipboard (clip.exe)
+vnoremap <C-c> y:!echo <C-r>=escape(substitute(shellescape(getreg('"')), '\n', '\r', 'g'), '#%!')<CR> <Bar> clip.exe<CR><CR>
 " ----------------------------------------------------------------------------
 
 " ----------------------------------------------------------------------------
@@ -286,6 +289,9 @@ if has("autocmd")
   autocmd FileType cpp setl ts=4 sts=4 sw=4 noexpandtab tw=0 cindent
     \ cino=j1,(0
   autocmd BufNewFile,BufRead *.rts,*.rrr setlocal ft=cpp
+  " Set no line numbers in terminal buffers, since this leads wrong line
+  " wrapping/breaking
+  autocmd TerminalOpen * setlocal nonumber
 else
   " set autoindenting on, indents like the previous line
   set autoindent
