@@ -92,8 +92,10 @@ silent! colorscheme gruvbox
 set background=dark
 " True colors for terminal available, if vim >=8.0 or Neovim >= 0.1.5
 "if (has('vcon'))
-if (has('termguicolors'))
+if has('linux') && has('termguicolors')
   set notermguicolors
+else
+  set termguicolors
 endif
 " Color used for the line numbers
 "highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE
